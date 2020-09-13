@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    ansible_ssh_pipelining: yes
+  tasks:
+    - name: install zsh
+      apt:
+        name: zsh
+        state: present
+    - name: create sam user
+      user:
+        name: sam
+        shell: /usr/bin/zsh
+        groups: sudo
+        create_home: yes
+    - name: add sam authorized_key
+      authorized_key:
+        user: sam
+        state: present
+        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDImwbiygRvd4DSdq8WrAJuVgbIhK67Dy86G3t3/g4Xxhs72AWB83dz2lgi/9qBA6pELKe0chh4RPZmPsaCR24zrstaqond4JCrdJxSV+Fgk4t8O6jmS5siPYnIUyAbaUTxdkLmnJNEya2Svp5E4woTKtME1mXm4FBiyc9ZV6oFJ5oc7y3XTcgYhudGI2RzV7tquC0fpuV4RzIPclSEw9ITQvQFqSdqZfOhraGhr1nu2YUGJtAdks6Gusl65UYCwkwpuCH0SDFen1yk/JklkY7jH6qm15aJFQPcn/I/oNUsFRQ3TE0e2n5OnV7rx8QQSQx+mquXj+8VQYWU0WHhijyZ"
