@@ -1,2 +1,4 @@
 .vagrant/
 credentials/
+vendor/
+kube-prometheus-manifests/

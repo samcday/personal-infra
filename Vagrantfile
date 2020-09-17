@@ -3,9 +3,12 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "chonk", primary: true do |node|
     node.vm.network "private_network", ip: "192.168.50.4"
+    node.vm.provider :libvirt do |libvirt|
+      libvirt.cpus = 4
+      libvirt.memory = 4096
+    end
   end
 
-  # config.vm.provision :shell, inline: "echo 'Defaults: vagrant !requiretty' >> /etc/sudoers.d/vagrant-notty"
   config.vm.provision :ansible do |ansible|
     ansible.playbook = "playbook.yml"
     # kubespray expects become: true set at global level.
