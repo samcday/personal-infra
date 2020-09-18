@@ -1,0 +1,20 @@
+---
+- name: install wireguard-tools
+  apt:
+    name: wireguard-tools
+    state: present
+- name: create wg0 interface
+  command:
+    cmd: ip link add dev wg0 type wireguard
+    creates: /sys/class/net/wg0
+- name: configure wg0 address
+  command: ip addr replace dev wg0 192.168.250.1/24
+- name: put Wireguard private key in place
+  copy:
+    content: '{{ wireguard_private_key }}'
+    dest: /etc/wg0-private-key
+    mode: 0600
+- name: setup Wireguard
+  command: wg set wg0 listen-port 51820 private-key /etc/wg0-private-key peer 82xSogfNwqdBHJFmV4uliwN6s0GVXwfCKZW9URrM2Aw= allowed-ips 192.168.250.2/32
+- name: bring up wg0 interface
+  command: ip link set up wg0
