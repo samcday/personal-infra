@@ -23,5 +23,9 @@
         name: wireguard
       tags: [wireguard]
 
+    - import_role:
+        name: restic
+      tags: [backup]
+
 - name: Include kubespray tasks
   import_playbook: kubespray/cluster.yml
