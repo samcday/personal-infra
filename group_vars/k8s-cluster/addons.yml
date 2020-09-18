@@ -19,7 +19,7 @@ metrics_server_enabled: true
 # metrics_server_kubelet_preferred_address_types: "InternalIP"
 
 # Rancher Local Path Provisioner
-local_path_provisioner_enabled: false
+local_path_provisioner_enabled: true
 # local_path_provisioner_namespace: "local-path-storage"
 # local_path_provisioner_storage_class: "local-path"
 # local_path_provisioner_reclaim_policy: Delete

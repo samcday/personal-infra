@@ -22,9 +22,6 @@ Vagrant.configure("2") do |config|
       "etcd" => ["chonk"],
       "k8s-cluster:children" => ["kube-node", "kube-master"],
       "all:vars" => {
-        # These two lines enable local path storage provisioner for "persistent" volumes.
-        "local_path_provisioner_enabled" => "True",
-        "local_path_provisioner_claim_root" => "/var/lib/k8s-local-path-provisioner",
         # These two lines make kubespray copy the provisioner + config onto the host.
         "kubeconfig_localhost" => "True",
         "kubectl_localhost" => "True",
