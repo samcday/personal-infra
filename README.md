@@ -24,3 +24,8 @@ All the garbage infrastructure code to get my personal kube cluster and other st
  until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
  kubectl apply -f kube-prometheus-manifests
  ```
+
+### postgres-operator
+
+ * Managed via the Helm chart in `charts/crunchy-postgres-operator`
+ * Initial installation needs pgo_admin_password injected: `helm install postgres-operator -n pgo charts/crunchy-postgres-operator --set pgo_admin_password=poopie`
