@@ -9,6 +9,17 @@ All the garbage infrastructure code to get my personal kube cluster and other st
  * `vagrant up --provider=libvirt`
  * `alias kubectl="$(pwd)/.vagrant/provisioners/ansible/inventory/artifacts/kubectl.sh"`
 
+### Kubernetes Dashboard
+
+ * Grab a token for the admin-user: `kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')`
+ * Start a `kubectl proxy`
+ * Visit [http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/](http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/) in your browser.
+
+### Grafana
+
+ * `kubectl --namespace monitoring port-forward svc/grafana 3000`
+ * Visit [http://localhost:3000/](http://localhost:3000/) in your browser.
+
 ### Deploy
 
 `ansible-playbook -i inventory.ini playbook.yml -b -v`
