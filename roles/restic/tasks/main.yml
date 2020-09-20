@@ -55,7 +55,7 @@
 - name: import storage box known host
   shell:
     cmd: |
-      ssh-keyscan -H u243008.your-storagebox.de -p 23 > ~restic/.ssh/known_hosts
+      ssh-keyscan u243008.your-storagebox.de -p 23 > ~restic/.ssh/known_hosts
       chown restic ~restic/.ssh/known_hosts
     creates: /home/restic/.ssh/known_hosts
 
