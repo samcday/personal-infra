@@ -34,7 +34,7 @@ const firewall = new hcloud.Firewall("infra", {
   ]
 })
 
-const controlNode = new hcloud.Server("control", {
+const controlNode1 = new hcloud.Server("control1", {
   image: "debian-10",
   serverType: "cpx11",
   location: "nbg1",
@@ -48,7 +48,7 @@ const controlNode = new hcloud.Server("control", {
   firewallIds: [firewall.id.apply(id => parseInt(id, 10))],
   userData: cfg.requireSecret("k3s_token").apply(k3s_token => `#!/bin/bash
 apt update
-apt install apparmor apparmor-utils
-curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -
+apt install -y apparmor apparmor-utils
+curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -s - --cluster-init
   `),
 });
