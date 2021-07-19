@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - main
+    paths:
+      - infra/**
+defaults:
+  run:
+    working-directory: infra
 jobs:
   preview:
     name: Update
