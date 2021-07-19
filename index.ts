@@ -21,18 +21,16 @@ const sshKey = new hcloud.SshKey("personal", {
 });
 
 const firewall = new hcloud.Firewall("infra", {
-  rules: [
-    {
-      direction: "in",
-      protocol: "tcp",
-      port: "22",
-      sourceIps: [
-        "0.0.0.0/0",
-        "::/0",
-      ],
-    },
-  ]
-})
+  rules: [22, 6443].map(port => ({
+    direction: "in",
+    protocol: "tcp",
+    port: String(port),
+    sourceIps: [
+      "0.0.0.0/0",
+      "::/0",
+    ],
+  })),
+});
 
 const controlNode1 = new hcloud.Server("control1", {
   image: "debian-10",
