@@ -35,3 +35,9 @@ spec:
               requests:
                 storage: 20Gi
             storageClassName: hcloud-volumes
+  patroni:
+    dynamicConfiguration:
+      bootstrap:
+        initdb:
+          - encoding: UTF8
+          - locale: C
