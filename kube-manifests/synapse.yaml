@@ -3,41 +3,26 @@ kind: Namespace
 metadata:
   name: synapse
 ---
-apiVersion: postgres-operator.crunchydata.com/v1beta1
-kind: PostgresCluster
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
 metadata:
-  name: db
+  name: synapse-db
   namespace: synapse
 spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-ha:centos8-13.3-0
-  postgresVersion: 13
-  instances:
-    - name: instance1
-      dataVolumeClaimSpec:
-        accessModes:
-        - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: 20Gi
-        storageClassName: hcloud-volumes
-  backups:
-    pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.33-0
-      repoHost:
-        dedicated: {}
-      repos:
-      - name: repo1
-        volume:
-          volumeClaimSpec:
-            accessModes:
-            - "ReadWriteOnce"
-            resources:
-              requests:
-                storage: 20Gi
-            storageClassName: hcloud-volumes
+  teamId: synapse
+  volume:
+    size: 20Gi
+    storageClass: hcloud-volumes
+  numberOfInstances: 1
+  users:
+    synapse:
+    - superuser
+    - createdb
+  databases:
+    synapse: synapse
+  postgresql:
+    version: "13"
   patroni:
-    dynamicConfiguration:
-      bootstrap:
-        initdb:
-          - encoding: UTF8
-          - locale: C
+    initdb:
+      encoding: "UTF8"
+      locale: "C"
