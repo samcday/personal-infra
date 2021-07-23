@@ -19,3 +19,10 @@ releases:
             create: yes
     secrets:
       - secrets/hcloud-csi-driver.yaml
+
+  - name: grafana-agent
+    chart: ./charts/grafana-agent
+    values:
+      - username: '166507'
+    secrets:
+      - secrets/grafana-agent.yaml
