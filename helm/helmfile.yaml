@@ -5,6 +5,9 @@ repositories:
 - name: mlohr
   url: https://helm-charts.mlohr.com/
 
+- name: prometheus-community
+  url: https://prometheus-community.github.io/helm-charts
+
 releases:
   - name: postgres-operator
     chart: zalando/postgres-operator
@@ -26,3 +29,16 @@ releases:
       - username: '166507'
     secrets:
       - secrets/grafana-agent.yaml
+
+  - name: node-exporter
+    chart: prometheus-community/prometheus-node-exporter
+    version: 2.0.1
+    values:
+      - prometheus:
+          monitor:
+            enabled: yes
+        tolerations:
+          - key: CriticalAddonsOnly
+            operator: Exists
+          - effect: NoSchedule
+            operator: Exists
