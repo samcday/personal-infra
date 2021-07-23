@@ -1,44 +1,50 @@
 repositories:
 - name: zalando
   url: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
-
 - name: mlohr
   url: https://helm-charts.mlohr.com/
-
 - name: prometheus-community
   url: https://prometheus-community.github.io/helm-charts
 
 releases:
-  - name: postgres-operator
-    chart: zalando/postgres-operator
-    version: 1.6.3
+- name: postgres-operator
+  chart: zalando/postgres-operator
+  version: 1.6.3
 
-  - name: hcloud-csi-driver
-    chart: mlohr/hcloud-csi-driver
-    version: 1.1.3
-    values:
-      - csiDriver:
-          secret:
-            create: yes
-    secrets:
-      - secrets/hcloud-csi-driver.yaml
+- name: hcloud-csi-driver
+  chart: mlohr/hcloud-csi-driver
+  version: 1.1.3
+  values:
+  - csiDriver:
+      secret:
+        create: yes
+  secrets:
+  - secrets/hcloud-csi-driver.yaml
 
-  - name: grafana-agent
-    chart: ./charts/grafana-agent
-    values:
-      - username: '166507'
-    secrets:
-      - secrets/grafana-agent.yaml
+- name: grafana-agent
+  chart: ./charts/grafana-agent
+  values:
+  - username: '166507'
+  secrets:
+  - secrets/grafana-agent.yaml
 
-  - name: node-exporter
-    chart: prometheus-community/prometheus-node-exporter
-    version: 2.0.1
-    values:
-      - prometheus:
-          monitor:
-            enabled: yes
-        tolerations:
-          - key: CriticalAddonsOnly
-            operator: Exists
-          - effect: NoSchedule
-            operator: Exists
+- name: node-exporter
+  chart: prometheus-community/prometheus-node-exporter
+  version: 2.0.1
+  values:
+  - prometheus:
+      monitor:
+        enabled: yes
+    tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+    - effect: NoSchedule
+      operator: Exists
+
+- name: kube-state-metrics
+  chart: prometheus-community/kube-state-metrics
+  version: 3.4.1
+  values:
+  - prometheus:
+      monitor:
+        enabled: yes
