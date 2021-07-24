@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-pod-config
+  namespace: default
+data:
+  AWS_ENDPOINT: {{ .Values.endpoint }}
+  AWS_ACCESS_KEY_ID: {{ .Values.access_key }}

@@ -5,15 +5,15 @@ metadata:
 spec:
   teamId: synapse
   volume:
-    size: 20Gi
+    size: 40Gi
     storageClass: hcloud-volumes
   numberOfInstances: 1
   users:
-    synapse:
+    synapse_user:
     - superuser
     - createdb
   databases:
-    synapse: synapse
+    synapse: synapse_user
   postgresql:
     version: "13"
   patroni:

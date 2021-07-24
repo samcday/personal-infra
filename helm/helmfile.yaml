@@ -7,9 +7,24 @@ repositories:
   url: https://prometheus-community.github.io/helm-charts
 
 releases:
+- name: pgo-config
+  chart: ./charts/pgo-config
+  values:
+  - endpoint: https://s3.eu-central-003.backblazeb2.com
+  secrets:
+  - secrets/pgo-config.yaml
+
 - name: postgres-operator
   chart: zalando/postgres-operator
   version: 1.6.3
+  values:
+  - configKubernetes:
+      enable_pod_disruption_budget: "false"
+      pod_environment_configmap: default/postgres-pod-config
+      pod_environment_secret: postgres-pod-secrets
+  - configAwsOrGcp:
+      aws_region: eu-central-003
+      wal_s3_bucket: samcday-pgo
 
 - name: hcloud-csi-driver
   chart: mlohr/hcloud-csi-driver
