@@ -7,6 +7,31 @@ repositories:
   url: https://prometheus-community.github.io/helm-charts
 
 releases:
+- name: hcloud-controller
+  chart: mlohr/hcloud-cloud-controller-manager
+  version: 2.4.1
+  values:
+  - manager:
+      secret:
+        create: true
+      privateNetwork:
+        enabled: true
+        id: infra
+        clusterSubnet: 10.233.255.0/24
+
+  secrets:
+  - secrets/hcloud-controller.yaml
+
+- name: hcloud-csi-driver
+  chart: mlohr/hcloud-csi-driver
+  version: 1.1.3
+  values:
+  - csiDriver:
+      secret:
+        create: yes
+  secrets:
+  - secrets/hcloud-csi-driver.yaml
+
 - name: pgo-config
   chart: ./charts/pgo-config
   values:
@@ -25,16 +50,6 @@ releases:
   - configAwsOrGcp:
       aws_region: eu-central-003
       wal_s3_bucket: samcday-pgo
-
-- name: hcloud-csi-driver
-  chart: mlohr/hcloud-csi-driver
-  version: 1.1.3
-  values:
-  - csiDriver:
-      secret:
-        create: yes
-  secrets:
-  - secrets/hcloud-csi-driver.yaml
 
 - name: grafana-agent
   chart: ./charts/grafana-agent

@@ -4,7 +4,8 @@ import * as hcloud from "@pulumi/hcloud";
 const cfg = new pulumi.Config();
 
 const network = new hcloud.Network("infra", {
-  ipRange: "10.0.0.0/24",
+  name: "infra",
+  ipRange: "10.0.0.0/8",
 });
 
 const networkId = network.id.apply(id => parseInt(id, 10));
@@ -35,9 +36,8 @@ const firewall = new hcloud.Firewall("infra", {
 });
 
 // Ensure control node(s) don't schedule user workloads and then keel over when slapped by oom-killer.
-const controlNodeOpts = "--node-taint CriticalAddonsOnly=true:NoExecute";
-// Make sure flannel uses the private network.
-const nodeOpts = "--flannel-iface enp7s0";
+const controlNodeOpts = "--node-taint CriticalAddonsOnly=true:NoExecute --disable-cloud-controller";
+const nodeOpts = "--kubelet-arg cloud-provider=external";
 
 const controlNode1 = new hcloud.Server("control1", {
   image: "debian-10",
@@ -54,8 +54,10 @@ const controlNode1 = new hcloud.Server("control1", {
   userData: cfg.requireSecret("k3s_token").apply(k3s_token => `#!/bin/bash
 apt update
 apt install -y apparmor apparmor-utils
-curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -s - --cluster-init --node-ip 10.0.0.2 ${nodeOpts} ${controlNodeOpts}
+curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -s - --cluster-init ${nodeOpts} ${controlNodeOpts}
   `),
+}, {
+  dependsOn: [network],
 });
 
 // for(const num of [2, 3]) {
@@ -77,6 +79,8 @@ curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -s - --cluster-init -
 //   apt install -y apparmor apparmor-utils
 //   curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -s - --server https://10.0.0.2:6443 --node-ip ${ip} ${controlNodeOpts}
 //     `),
+//   }, {
+//     dependsOn: [network]
 //   });
 // }
 
@@ -97,7 +101,9 @@ for(const num of [1, 2]) {
     userData: cfg.requireSecret("k3s_token").apply(k3s_token => `#!/bin/bash
   apt update
   apt install -y apparmor apparmor-utils
-  curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" K3S_URL=https://10.0.0.2:6443 sh -s - --node-ip ${ip} ${nodeOpts}
+  curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" K3S_URL=https://10.0.0.2:6443 sh -s - ${nodeOpts}
     `),
+  }, {
+    dependsOn: [controlNode1, network]
   });
 }
