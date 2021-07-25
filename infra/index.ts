@@ -96,6 +96,7 @@ curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -s - --cluster-init $
 // }
 
 for(const num of [1, 2]) {
+  const ip  = "10.0.0." + (4 + num);
   new hcloud.Server("worker" + num, {
     image: "debian-10",
     serverType: "cx21",
@@ -103,6 +104,7 @@ for(const num of [1, 2]) {
     sshKeys: [sshKey.id],
     networks: [
       {
+        ip,
         networkId,
       }
     ],
