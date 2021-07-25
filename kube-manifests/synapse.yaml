@@ -20,3 +20,10 @@ spec:
     initdb:
       encoding: "UTF8"
       locale: "C"
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1000Mi
+    limits:
+      cpu: 1000m
+      memory: 1000Mi

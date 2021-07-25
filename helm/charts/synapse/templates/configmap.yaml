@@ -46,6 +46,10 @@ data:
       resources:
       - names: [client, federation]
         compress: false
+    - type: metrics
+      port: 9000
+      bind_addresses:
+        - '0.0.0.0'
     admin_contact: 'mailto:me@samcday.com'
     federation_ip_range_blacklist:
     - '127.0.0.0/8'

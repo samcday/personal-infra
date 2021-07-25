@@ -46,6 +46,12 @@ spec:
         env:
         - name: SYNAPSE_CONFIG_PATH
           value: /extra-config/generated-homeserver.yaml
+        resources:
+          requests:
+            memory: "1024Mi"
+            cpu: "500m"
+          limits:
+            memory: "1536Mi"
         volumeMounts:
         - name: config
           mountPath: /config
