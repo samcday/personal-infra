@@ -5,6 +5,10 @@ repositories:
   url: https://helm-charts.mlohr.com/
 - name: prometheus-community
   url: https://prometheus-community.github.io/helm-charts
+- name: ingress-nginx
+  url: https://kubernetes.github.io/ingress-nginx
+- name: jetstack
+  url: https://charts.jetstack.io
 
 releases:
 - name: hcloud-controller
@@ -32,6 +36,22 @@ releases:
   secrets:
   - secrets/hcloud-csi-driver.yaml
 
+- name: ingress-nginx
+  chart: ingress-nginx/ingress-nginx
+  values:
+  - controller:
+      service:
+        annotations:
+          load-balancer.hetzner.cloud/location: nbg1
+          load-balancer.hetzner.cloud/use-private-ip: "true"
+
+- name: cert-manager
+  chart: jetstack/cert-manager
+  values:
+  - installCRDs: true
+    prometheus:
+      servicemonitor:
+        enabled: false
 - name: pgo-config
   chart: ./charts/pgo-config
   values:
