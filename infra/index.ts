@@ -35,9 +35,20 @@ const firewall = new hcloud.Firewall("infra", {
   rules: firewallRules,
 });
 
-// Ensure control node(s) don't schedule user workloads and then keel over when slapped by oom-killer.
-const controlNodeOpts = "--node-taint CriticalAddonsOnly=true:NoExecute --disable-cloud-controller";
-const nodeOpts = "--flannel-iface enp7s0 --kubelet-arg cloud-provider=external";
+const controlNodeOpts = [
+  // Taint control nodes to keep regular workloads from running on them.
+  "--node-taint CriticalAddonsOnly=true:NoExecute",
+  // We'll be using hcloud-cloud-controller-manager.
+  "--disable-cloud-controller",
+].join(" ");
+
+const nodeOpts = [
+  // Flannel (or the way k3s is configuring it) is awful, and will try and route traffic over public IP without this option.
+  "--flannel-iface enp7s0",
+  // We'll be using hcloud-cloud-controller-manager.
+  // This option can be/must be removed in Kube 1.23.
+  "--kubelet-arg cloud-provider=external",
+].join(" ");
 
 const controlNode1 = new hcloud.Server("control1", {
   image: "debian-10",
