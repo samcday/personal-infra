@@ -37,7 +37,7 @@ const firewall = new hcloud.Firewall("infra", {
 
 // Ensure control node(s) don't schedule user workloads and then keel over when slapped by oom-killer.
 const controlNodeOpts = "--node-taint CriticalAddonsOnly=true:NoExecute --disable-cloud-controller";
-const nodeOpts = "--kubelet-arg cloud-provider=external";
+const nodeOpts = "--flannel-iface enp7s0 --kubelet-arg cloud-provider=external";
 
 const controlNode1 = new hcloud.Server("control1", {
   image: "debian-10",
@@ -77,10 +77,10 @@ curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -s - --cluster-init $
 //     userData: cfg.requireSecret("k3s_token").apply(k3s_token => `#!/bin/bash
 //   apt update
 //   apt install -y apparmor apparmor-utils
-//   curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -s - --server https://10.0.0.2:6443 --node-ip ${ip} ${controlNodeOpts}
+//   curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -s - --server https://10.0.0.2:6443 ${nodeOpts} ${controlNodeOpts}
 //     `),
 //   }, {
-//     dependsOn: [network]
+//     dependsOn: [controlNode1, network]
 //   });
 // }
 
