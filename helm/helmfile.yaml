@@ -9,6 +9,8 @@ repositories:
   url: https://kubernetes.github.io/ingress-nginx
 - name: jetstack
   url: https://charts.jetstack.io
+- name: vmware-tanzu
+  url: https://vmware-tanzu.github.io/helm-charts
 
 releases:
 - name: hcloud-controller
@@ -53,6 +55,35 @@ releases:
       servicemonitor:
         enabled: true
 
+- name: velero
+  chart: vmware-tanzu/velero
+  values:
+  - deployRestic: true
+    initContainers:
+    - name: velero-plugin-for-aws
+      image: velero/velero-plugin-for-aws:v1.2.0
+      volumeMounts:
+      - mountPath: /target
+        name: plugins
+    configuration:
+      provider: aws
+      backupStorageLocation:
+        name: default
+        bucket: samcday-cluster-backups
+        config:
+          region: eu-central-003
+          s3Url: https://s3.eu-central-003.backblazeb2.com
+      volumeSnapshotLocation:
+        name: default
+        bucket: samcday-cluster-backups
+        config:
+          region: eu-central-003
+          s3Url: https://s3.eu-central-003.backblazeb2.com
+    metrics:
+      serviceMonitor:
+        enabled: true
+  secrets:
+  - secrets/velero.yaml
 - name: pgo-config
   chart: ./charts/pgo-config
   values:
