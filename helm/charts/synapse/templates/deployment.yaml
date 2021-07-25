@@ -8,6 +8,8 @@ metadata:
   name: synapse
   namespace: {{ .Release.Namespace }}
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
@@ -46,6 +48,10 @@ spec:
         env:
         - name: SYNAPSE_CONFIG_PATH
           value: /extra-config/generated-homeserver.yaml
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8008
         resources:
           requests:
             memory: "1024Mi"
