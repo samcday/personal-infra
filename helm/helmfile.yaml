@@ -51,7 +51,8 @@ releases:
   - installCRDs: true
     prometheus:
       servicemonitor:
-        enabled: false
+        enabled: true
+
 - name: pgo-config
   chart: ./charts/pgo-config
   values:
