@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: synapse
+spec:
+  selector:
+    app.kubernetes.io/name: synapse
+  ports:
+    - protocol: TCP
+      port: 8008
+      targetPort: 8008

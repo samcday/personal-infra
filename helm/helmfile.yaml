@@ -78,3 +78,8 @@ releases:
   - prometheus:
       monitor:
         enabled: yes
+
+- name: synapse
+  chart: ./charts/synapse
+  secrets:
+  - secrets/synapse.yaml
