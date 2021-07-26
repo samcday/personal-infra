@@ -5,23 +5,16 @@ metadata:
 data:
   log.yaml: |
     version: 1
-
     formatters:
-      precise:
-        format: '%(name)s:%(lineno)d - %(levelname)s - %(request)s - %(message)s'
+      json:
+        class: synapse.logging.TerseJsonFormatter
     handlers:
-      console:
+      stdout:
         class: logging.StreamHandler
-        formatter: precise
-    loggers:
-      synapse.storage.SQL:
-        level: INFO
-      twisted:
-        propagate: false
+        formatter: json
     root:
-      level: WARN
-      handlers: [console]
-    disable_existing_loggers: false
+      level: INFO
+      handlers: [stdout]
   dbconfig.yaml: |
     database:
       name: psycopg2
@@ -82,3 +75,4 @@ data:
     signing_key_path: "/secret/homeserver.signing.key"
     trusted_key_servers:
     - server_name: "matrix.org"
+    suppress_key_server_warning: true
