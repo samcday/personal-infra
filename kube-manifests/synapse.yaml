@@ -22,7 +22,7 @@ spec:
       locale: "C"
   resources:
     requests:
-      cpu: 500m
+      cpu: 250m
       memory: 1000Mi
     limits:
       cpu: 1000m

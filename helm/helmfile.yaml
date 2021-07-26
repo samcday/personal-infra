@@ -57,6 +57,7 @@ releases:
 
 - name: velero
   chart: vmware-tanzu/velero
+  # https://github.com/vmware-tanzu/helm-charts/blob/main/charts/velero/values.yaml
   values:
   - deployRestic: true
     initContainers:
@@ -82,6 +83,13 @@ releases:
     metrics:
       serviceMonitor:
         enabled: true
+    resources:
+      requests:
+        cpu: 100m
+    restic:
+      resources:
+        requests:
+          cpu: 250m
   secrets:
   - secrets/velero.yaml
 - name: pgo-config
