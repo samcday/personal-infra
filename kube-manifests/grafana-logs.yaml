@@ -140,6 +140,19 @@ spec:
         - mountPath: /grafana-agent-secrets
           name: grafana-agent-secrets
           readOnly: true
+      - name: configmap-reload
+        image: jimmidyson/configmap-reload:v0.5.0
+        imagePullPolicy: IfNotPresent
+        args:
+        - -volume-dir
+        - /etc/agent
+        - -webhook-method
+        - POST
+        - -webhook-url
+        - http://localhost:80/-/reload
+        volumeMounts:
+        - mountPath: /etc/agent
+          name: grafana-agent-logs
       serviceAccount: grafana-agent-logs
       tolerations:
       - effect: NoSchedule
