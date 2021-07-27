@@ -6,6 +6,9 @@ metadata:
   labels:
     agent: grafana-agent
 spec:
+  additionalScrapeConfigs:
+    name: grafana-agent-extra-jobs
+    key: jobs.yaml
   remoteWrite:
   - url: https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
     basicAuth:

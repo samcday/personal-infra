@@ -118,21 +118,18 @@ releases:
   secrets:
   - secrets/grafana-agent.yaml
 
-- name: kube-prometheus-stack
-  chart: prometheus-community/kube-prometheus-stack
-  version: 17.0.2
-  # https://github.com/prometheus-community/helm-charts/blob/kube-prometheus-stack-17.0.2/charts/kube-prometheus-stack/values.yaml
+- name: node-exporter
+  chart: prometheus-community/prometheus-node-exporter
+  version: 2.0.1
   values:
-  - defaultRules:
-      create: false
-    alertManager:
-      enabled: false
-    grafana:
-      enabled: false
-    prometheusOperator:
-      enabled: false
-    prometheus:
-      enabled: false
+  - prometheus:
+      monitor:
+        enabled: yes
+    tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+    - effect: NoSchedule
+      operator: Exists
 
 - name: synapse
   chart: ./charts/synapse
