@@ -23,6 +23,10 @@ spec:
     storage.wiredTiger.engineConfig.journalCompressor: zlib
   statefulSet:
     spec:
+      template:
+        metadata:
+          annotations:
+            backup.velero.io/backup-volumes: data-volume
       volumeClaimTemplates:
       - metadata:
           name: data-volume
