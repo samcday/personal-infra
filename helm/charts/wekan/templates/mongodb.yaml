@@ -1,0 +1,34 @@
+---
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: wekan-mongodb
+spec:
+  members: 1
+  type: ReplicaSet
+  version: "4.4.7"
+  security:
+    authentication:
+      modes: ["SCRAM", "SCRAM-SHA-1"]
+  users:
+  - name: wekan
+    db: wekan
+    passwordSecretRef:
+      name: wekan-mongodb-password
+    roles:
+      - name: readWrite
+        db: wekan
+    scramCredentialsSecretName: wekan-mongodb
+  additionalMongodConfig:
+    storage.wiredTiger.engineConfig.journalCompressor: zlib
+  statefulSet:
+    spec:
+      volumeClaimTemplates:
+      - metadata:
+          name: data-volume
+        spec:
+          storageClassName: hcloud-volumes
+      - metadata:
+          name: logs-volume
+        spec:
+          storageClassName: hcloud-volumes
