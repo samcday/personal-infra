@@ -15,4 +15,5 @@ Handles provisioning network, subnets, firewall, and servers to bring up a new c
  * Add the cluster token to Pulumi config: `pulumi config set k3s_token $(<token) --secret && rm token`
  * `pulumi up`
  * Wait a little while for the initial control plane node to come up (30-60sec).
- * Pull the kubeconfig down: `IP=$(pulumi stack output controlNode1PublicIP); mkdir ~/.kube; scp root@$IP:/etc/rancher/k3s/k3s.yaml ~/.kube/config; sed -i -e s/127.0.0.1/$IP/ ~/.kube/config`
+ * Pull the kubeconfig down: `IP=$(pulumi stack -s main output controlNode1PublicIP); mkdir ~/.kube; scp root@$IP:/etc/rancher/k3s/k3s.yaml ~/.kube/config; sed -i -e s/127.0.0.1/$IP/ ~/.kube/config`
+ * Bootstrap Flux: `flux bootstrap github --owner=samcday --repository=cluster --path=. --personal --toleration-keys=CriticalAddonsOnly`

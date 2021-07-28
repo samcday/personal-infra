@@ -2,6 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as hcloud from "@pulumi/hcloud";
 
 const cfg = new pulumi.Config();
+const hcloudCfg = new pulumi.Config("hcloud");
 
 const network = new hcloud.Network("cluster", {
   name: "cluster",
@@ -33,13 +34,19 @@ const firewall = new hcloud.Firewall("firewall", {
 const nodeOpts = [
   // Taint control nodes to prevent regular workloads running on them.
   "--node-taint CriticalAddonsOnly=true:NoExecute",
+
   // We'll be using hcloud-cloud-controller-manager.
   "--disable-cloud-controller",
   "--kubelet-arg cloud-provider=external",
+
   // Without this, flannel tries to direct traffic over the public interface, which dies at the firewall.
-  // ens10 is the interface that Debian brings up for the private network on Intel cx11 instances.
-  // AMD instances use something different. Of course. "enp7s0"
-  "--flannel-iface ens10",
+  // It's also very bad because VXLAN traffic ain't encrypted dawg.
+  // enp7s0 is the interface that Debian brings up for the private network on AMD cpx11 instances.
+  // Intel instances use something different. Of course. "ens10"
+  "--flannel-iface enp7s0",
+
+  // This is the default CIDR for Hetzner CCCM.
+  "--cluster-cidr=10.244.0.0/16",
 ].join(" ");
 
 // First control node is special. All other control nodes + worker nodes are hardcoded to bootstrap into the cluster
@@ -47,7 +54,7 @@ const nodeOpts = [
 const controlNode1 = new hcloud.Server("control1", {
   name: "control1",
   image: "debian-10",
-  serverType: "cx11",
+  serverType: "cpx11",
   location: "nbg1",
   sshKeys: ["key"],
   networks: [
@@ -57,11 +64,18 @@ const controlNode1 = new hcloud.Server("control1", {
     }
   ],
   firewallIds: [firewall.id.apply(id => parseInt(id, 10))],
-  userData: cfg.requireSecret("k3s_token").apply(k3s_token => `#!/bin/bash
+  userData: pulumi.all([
+    cfg.requireSecret("k3s_token"), hcloudCfg.requireSecret("token")]).apply(([k3sToken, hcloudToken]) => `
+#!/bin/bash
 apt update
-apt install -y apparmor apparmor-utils
-curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -s - --cluster-init ${nodeOpts} --disable servicelb --disable traefik
-  `),
+apt install -y apparmor apparmor-utils curl
+curl -sfL https://get.k3s.io | K3S_TOKEN="${k3sToken}" sh -s - --cluster-init ${nodeOpts} --disable servicelb \
+                                                               --disable traefik
+kubectl -n kube-system create --dry-run=client secret generic hcloud --from-literal=token=${hcloudToken} \
+        --from-literal=network=cluster -o yaml > /var/lib/rancher/k3s/server/manifests/hcloud-secret.yaml
+curl -L https://github.com/hetznercloud/hcloud-cloud-controller-manager/releases/latest/download/ccm-networks.yaml \
+     -o /var/lib/rancher/k3s/server/manifests/hccm.yaml
+  `.trim()),
 }, {
   dependsOn: [firewall, controlPlaneSubnet],
 });
