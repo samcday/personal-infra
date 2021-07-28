@@ -1,0 +1,5 @@
+config:
+  control-plane:k3s_token:
+    secure: AAABABlzHcETOYTG2XRlCI5MwoRmEEbKPLjEvg33aoh8csecvu3gz/pRr+eWI9+aVfhfENMbQih1lQ3cCqkYBwQMBlfxqUJbyYullZ6nxIjQSK/bGYEgT0Tgnz8w/3la
+  hcloud:token:
+    secure: AAABACYuXnaAl0PnLMCO338y3Aw7tU+xNtyI3Sf8V21EZ28d2T0WDlLuUtD4iB+j4r67HhN1LCZIplZB//EylZHJWgcuTw3rrrrvlU0qTqi8unhC5h3AM25wbQxiXbdp

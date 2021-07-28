@@ -1,0 +1,3 @@
+name: control-plane
+runtime: nodejs
+description: Bootstrap k3s control plane in Hetzner Cloud.
