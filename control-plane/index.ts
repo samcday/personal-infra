@@ -44,7 +44,7 @@ const nodeOpts = [
 
 // First control node is special. All other control nodes + worker nodes are hardcoded to bootstrap into the cluster
 // via this node's fixed private IP: 10.0.0.2
-new hcloud.Server("control1", {
+const controlNode1 = new hcloud.Server("control1", {
   name: "control1",
   image: "debian-10",
   serverType: "cx11",
@@ -65,3 +65,5 @@ curl -sfL https://get.k3s.io | K3S_TOKEN="${k3s_token}" sh -s - --cluster-init $
 }, {
   dependsOn: [firewall, controlPlaneSubnet],
 });
+
+export const controlNode1PublicIP = controlNode1.ipv4Address;
