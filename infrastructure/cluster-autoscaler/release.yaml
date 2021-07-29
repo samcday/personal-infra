@@ -1,0 +1,32 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: cluster-autoscaler
+  namespace: kube-system
+spec:
+  releaseName: cluster-autoscaler
+  chart:
+    spec:
+      chart: cluster-autoscaler
+      sourceRef:
+        kind: HelmRepository
+        name: autoscaler
+        namespace: flux-system
+      version: 9.10.3
+  interval: 1h0m0s
+  install:
+    remediation:
+      retries: 3
+  # https://github.com/kubernetes/autoscaler/blob/master/charts/cluster-autoscaler/values.yaml
+  values:
+    cloudProvider: hetzner
+    extraArgs:
+      nodes: 1:1:CPX11:NBG1:pool1
+    extraEnvSecrets:
+      HCLOUD_TOKEN:
+        name: hcloud
+        key: token
+    extraEnv:
+      HCLOUD_IMAGE: debian-10
+      HCLOUD_NETWORK: cluster
+      HCLOUD_SSH_KEY: key
