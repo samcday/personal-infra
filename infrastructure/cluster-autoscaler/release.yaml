@@ -20,6 +20,8 @@ spec:
   # https://github.com/kubernetes/autoscaler/blob/master/charts/cluster-autoscaler/values.yaml
   values:
     cloudProvider: hetzner
+    autoDiscovery:
+      clusterName: cluster
     extraArgs:
       nodes: 1:1:CPX11:NBG1:pool1
     extraEnvSecrets:
