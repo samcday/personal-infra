@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: synapse
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  name: synapse
+  namespace: {{ .Release.Namespace }}
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: synapse
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        backup.velero.io/backup-volumes: synapse-media
+      labels:
+        app.kubernetes.io/name: synapse
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      initContainers:
+      - name: setup-dbconfig
+        image: busybox:1.33.1
+        command:
+        - sh
+        - '-c'
+        - 'cp /config/dbconfig.yaml /extra-config && sed -i -e s/_HOST_/$SYNAPSE_DB_SERVICE_HOST/ -e s/_USER_/$(cat /dbcreds/username)/ -e s/_PASS_/$(cat /dbcreds/password)/ /extra-config/dbconfig.yaml && cat /config/homeserver.yaml /extra-config/dbconfig.yaml >> /extra-config/generated-homeserver.yaml'
+        volumeMounts:
+        - name: config
+          mountPath: /config
+          readOnly: true
+        - name: secret
+          mountPath: /secret
+          readOnly: true
+        - name: dbcreds
+          mountPath: /dbcreds
+          readOnly: true
+        - name: synapse-media
+          mountPath: /media
+        - name: extra-config
+          mountPath: /extra-config
+      containers:
+      - name: {{ .Chart.Name }}
+        image: matrixdotorg/synapse:v1.38.1
+        env:
+        - name: SYNAPSE_CONFIG_PATH
+          value: /extra-config/generated-homeserver.yaml
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8008
+        resources:
+          requests:
+            memory: "1024Mi"
+            cpu: "500m"
+          limits:
+            memory: "1536Mi"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+          readOnly: true
+        - name: secret
+          mountPath: /secret
+          readOnly: true
+        - name: dbcreds
+          mountPath: /dbcreds
+          readOnly: true
+        - name: synapse-media
+          mountPath: /media
+        - name: extra-config
+          mountPath: /extra-config
+      volumes:
+      - name: dbcreds
+        secret:
+          secretName: synapse-user.synapse-db.credentials.postgresql.acid.zalan.do
+      - name: config
+        configMap:
+          name: synapse-homeserver-yaml
+      - name: secret
+        secret:
+          secretName: synapse-homeserver-secrets
+      - name: synapse-media
+        persistentVolumeClaim:
+          claimName: synapse-media
+      - name: extra-config
+        emptyDir: {}

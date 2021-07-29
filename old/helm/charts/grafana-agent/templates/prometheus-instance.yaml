@@ -1,0 +1,35 @@
+apiVersion: monitoring.grafana.com/v1alpha1
+kind: PrometheusInstance
+metadata:
+  name: primary
+  namespace: default
+  labels:
+    agent: grafana-agent
+spec:
+  additionalScrapeConfigs:
+    name: grafana-agent-extra-jobs
+    key: jobs.yaml
+  remoteWrite:
+  - url: https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
+    basicAuth:
+      username:
+        name: grafana-cloud-credentials
+        key: username
+      password:
+        name: grafana-cloud-credentials
+        key: password
+
+  serviceMonitorNamespaceSelector: {}
+  # serviceMonitorSelector:
+  #   matchLabels:
+  #     instance: primary
+
+  podMonitorNamespaceSelector: {}
+  # podMonitorSelector:
+  #   matchLabels:
+  #     instance: primary
+
+  probeNamespaceSelector: {}
+  # probeSelector:
+  #   matchLabels:
+  #     instance: primary

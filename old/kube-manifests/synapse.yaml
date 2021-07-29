@@ -1,0 +1,29 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: synapse-db
+spec:
+  teamId: synapse
+  volume:
+    size: 40Gi
+    storageClass: hcloud-volumes
+  numberOfInstances: 1
+  users:
+    synapse_user:
+    - superuser
+    - createdb
+  databases:
+    synapse: synapse_user
+  postgresql:
+    version: "13"
+  patroni:
+    initdb:
+      encoding: "UTF8"
+      locale: "C"
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1000Mi
+    limits:
+      cpu: 1000m
+      memory: 1000Mi

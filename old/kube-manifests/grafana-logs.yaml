@@ -1,0 +1,232 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: grafana-agent-logs
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: grafana-agent-logs
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  - nodes/proxy
+  - services
+  - endpoints
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: grafana-agent-logs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: grafana-agent-logs
+subjects:
+- kind: ServiceAccount
+  name: grafana-agent-logs
+  namespace: default
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-agent-logs
+data:
+  agent.yaml: |
+    server:
+      log_level: info
+    loki:
+      configs:
+      - name: default
+        positions:
+          filename: /tmp/positions.yaml
+        scrape_configs:
+        - job_name: systemd-journal
+          journal:
+            labels:
+              job: default/systemd-journal
+            path: /run/log/journal
+          relabel_configs:
+          - source_labels:
+            - __journal__systemd_unit
+            target_label: systemd_unit
+          - source_labels:
+            - __journal__hostname
+            target_label: nodename
+          - source_labels:
+            - __journal_syslog_identifier
+            target_label: syslog_identifier
+        - job_name: kubernetes
+          kubernetes_sd_configs:
+          - role: pod
+          relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_node_name]
+            target_label: __host__
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_node_name
+            target_label: node_name
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_namespace
+            target_label: namespace
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_name
+            target_label: pod
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_container_name
+            target_label: container
+          - action: replace
+            replacement: /var/log/pods/*$1/*.log
+            separator: /
+            source_labels:
+              - __meta_kubernetes_pod_uid
+              - __meta_kubernetes_pod_container_name
+            target_label: __path__
+          - action: replace
+            regex: true/(.*)
+            replacement: /var/log/pods/*$1/*.log
+            separator: /
+            source_labels:
+              - __meta_kubernetes_pod_annotationpresent_kubernetes_io_config_hash
+              - __meta_kubernetes_pod_annotation_kubernetes_io_config_hash
+              - __meta_kubernetes_pod_container_name
+            target_label: __path__
+          pipeline_stages:
+          - cri: {}
+          - match:
+              selector: '{container="synapse"}'
+              stages:
+              - json:
+                  expressions:
+                    synapse_namespace: namespace
+                    time: time
+              - timestamp:
+                  source: time
+                  format: Unix
+              - labels:
+                  synapse_namespace:
+        clients:
+        - url: https://logs-prod-us-central1.grafana.net/api/prom/push
+          basic_auth:
+            username: 82224
+            password_file: /grafana-agent-secrets/_secrets_default_grafana_cloud_credentials_password
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: grafana-agent-logs
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      name: grafana-agent-logs
+  template:
+    metadata:
+      labels:
+        name: grafana-agent-logs
+    spec:
+      containers:
+      - args:
+        - -config.file=/etc/agent/agent.yaml
+        command:
+        - /bin/agent
+        env:
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        image: grafana/agent:v0.17.0
+        imagePullPolicy: IfNotPresent
+        name: agent
+        ports:
+        - containerPort: 8080
+          name: http-metrics
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /etc/agent
+          name: grafana-agent-logs
+        - mountPath: /var/log
+          name: varlog
+          readOnly: true
+        - mountPath: /run/log/journal
+          name: journal
+          readOnly: true
+        - mountPath: /etc/machine-id
+          name: etcmachineid
+          readOnly: true
+        - mountPath: /grafana-agent-secrets
+          name: grafana-agent-secrets
+          readOnly: true
+      - name: configmap-reload
+        image: jimmidyson/configmap-reload:v0.5.0
+        imagePullPolicy: IfNotPresent
+        args:
+        - -volume-dir
+        - /etc/agent
+        - -webhook-method
+        - POST
+        - -webhook-url
+        - http://localhost:80/-/reload
+        volumeMounts:
+        - mountPath: /etc/agent
+          name: grafana-agent-logs
+      serviceAccount: grafana-agent-logs
+      tolerations:
+      - effect: NoExecute
+        operator: Exists
+      - effect: NoSchedule
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - effect: NoExecute
+        key: node.kubernetes.io/not-ready
+        operator: Exists
+      - effect: NoExecute
+        key: node.kubernetes.io/unreachable
+        operator: Exists
+      - effect: NoSchedule
+        key: node.kubernetes.io/disk-pressure
+        operator: Exists
+      - effect: NoSchedule
+        key: node.kubernetes.io/memory-pressure
+        operator: Exists
+      - effect: NoSchedule
+        key: node.kubernetes.io/pid-pressure
+        operator: Exists
+      - effect: NoSchedule
+        key: node.kubernetes.io/unschedulable
+        operator: Exists
+      volumes:
+      - secret:
+          secretName: grafana-agent-secrets
+        name: grafana-agent-secrets
+      - configMap:
+          name: grafana-agent-logs
+        name: grafana-agent-logs
+      - hostPath:
+          path: /var/log
+        name: varlog
+      - hostPath:
+          path: /run/log/journal
+        name: journal
+      - hostPath:
+          path: /etc/machine-id
+        name: etcmachineid
+  updateStrategy:
+    type: RollingUpdate

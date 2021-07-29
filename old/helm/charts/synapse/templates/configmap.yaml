@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: synapse-homeserver-yaml
+data:
+  log.yaml: |
+    version: 1
+    formatters:
+      json:
+        class: synapse.logging.TerseJsonFormatter
+    handlers:
+      stdout:
+        class: logging.StreamHandler
+        formatter: json
+    root:
+      level: INFO
+      handlers: [stdout]
+  dbconfig.yaml: |
+    database:
+      name: psycopg2
+      args:
+        user: _USER_
+        password: _PASS_
+        database: synapse
+        host: _HOST_
+        port: 5432
+        cp_min: 5
+        cp_max: 10
+  homeserver.yaml: |
+    server_name: samcday.com
+    public_baseurl: https://matrix.samcday.com
+    use_presence: true
+    listeners:
+    - port: 8008
+      tls: false
+      type: http
+      x_forwarded: true
+      bind_addresses: ['0.0.0.0']
+      resources:
+      - names: [client, federation]
+        compress: false
+    - type: metrics
+      port: 9000
+      bind_addresses:
+        - '0.0.0.0'
+    admin_contact: 'mailto:me@samcday.com'
+    federation_ip_range_blacklist:
+    - '127.0.0.0/8'
+    - '10.0.0.0/8'
+    - '172.16.0.0/12'
+    - '192.168.0.0/16'
+    - '100.64.0.0/10'
+    - '169.254.0.0/16'
+    - '::1/128'
+    - 'fe80::/64'
+    - 'fc00::/7'
+    log_config: "/config/log.yaml"
+    media_store_path: "/media"
+    url_preview_enabled: true
+    url_preview_ip_range_blacklist:
+    - '127.0.0.0/8'
+    - '10.0.0.0/8'
+    - '172.16.0.0/12'
+    - '192.168.0.0/16'
+    - '100.64.0.0/10'
+    - '169.254.0.0/16'
+    - '::1/128'
+    - 'fe80::/64'
+    - 'fc00::/7'
+    registration_shared_secret: {{ .Values.registration_secret }}
+    enable_metrics: true
+    metrics_flags:
+      known_servers: true
+    report_stats: true
+    signing_key_path: "/secret/homeserver.signing.key"
+    trusted_key_servers:
+    - server_name: "matrix.org"
+    suppress_key_server_warning: true
