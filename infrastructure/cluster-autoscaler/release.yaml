@@ -32,3 +32,7 @@ spec:
       HCLOUD_IMAGE: debian-10
       HCLOUD_NETWORK: cluster
       HCLOUD_SSH_KEY: key
+    tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+        effect: NoSchedule
