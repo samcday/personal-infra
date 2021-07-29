@@ -11,7 +11,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: autoscaler
-        namespace: flux-system
+        namespace: kube-system
       version: 9.10.3
   interval: 1h0m0s
   install:
@@ -28,6 +28,9 @@ spec:
       HCLOUD_TOKEN:
         name: hcloud
         key: token
+      HCLOUD_CLOUD_INIT:
+        name: autoscaler-cloud-init
+        key: data
     extraEnv:
       HCLOUD_IMAGE: debian-10
       HCLOUD_NETWORK: cluster
