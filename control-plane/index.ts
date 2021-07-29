@@ -65,7 +65,7 @@ const controlNode1 = new hcloud.Server("control1", {
   ],
   firewallIds: [firewall.id.apply(id => parseInt(id, 10))],
   userData: pulumi.all([
-    cfg.requireSecret("k3s_token"), hcloudCfg.requireSecret("token")]).apply(([k3sToken, hcloudToken]) => `
+    cfg.requireSecret("k3s_token"), cfg.requireSecret("age_key"), hcloudCfg.requireSecret("token")]).apply(([k3sToken, ageKey, hcloudToken]) => `
 #!/bin/bash
 apt update
 apt install -y apparmor apparmor-utils curl
@@ -75,6 +75,8 @@ kubectl -n kube-system create --dry-run=client secret generic hcloud --from-lite
         --from-literal=network=cluster -o yaml > /var/lib/rancher/k3s/server/manifests/hcloud-secret.yaml
 kubectl -n kube-system create --dry-run=client secret generic k3s-token --from-literal=token=${k3sToken} \
         -o yaml > /var/lib/rancher/k3s/server/manifests/k3s-token-secret.yaml
+kubectl -n kube-system create --dry-run=client secret generic sops-age --from-literal=age.agekey=${ageKey} \
+        -o yaml > /var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml
 curl -L https://github.com/hetznercloud/hcloud-cloud-controller-manager/releases/latest/download/ccm-networks.yaml \
      -o /var/lib/rancher/k3s/server/manifests/hccm.yaml
   `.trim()),

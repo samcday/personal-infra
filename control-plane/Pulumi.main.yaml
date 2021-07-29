@@ -1,4 +1,6 @@
 config:
+  control-plane:age_key:
+    secure: AAABAJZ5lbIDcZz/44ha2n/NN/4cA16XJ83JoHMqqIxlb2VEOK3h/YBQuhAzIiPYqEJ/BCx7E23BjUc8tObKfg7Bk+7/SsK1jCmTjDKZNrj+/Rm3bPKyPCqhwBm0qsHnljxw1ROffdaooA==
   control-plane:k3s_token:
     secure: AAABABlzHcETOYTG2XRlCI5MwoRmEEbKPLjEvg33aoh8csecvu3gz/pRr+eWI9+aVfhfENMbQih1lQ3cCqkYBwQMBlfxqUJbyYullZ6nxIjQSK/bGYEgT0Tgnz8w/3la
   hcloud:token:
