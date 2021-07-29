@@ -73,6 +73,8 @@ curl -sfL https://get.k3s.io | K3S_TOKEN="${k3sToken}" sh -s - --cluster-init ${
                                                                --disable traefik
 kubectl -n kube-system create --dry-run=client secret generic hcloud --from-literal=token=${hcloudToken} \
         --from-literal=network=cluster -o yaml > /var/lib/rancher/k3s/server/manifests/hcloud-secret.yaml
+kubectl -n kube-system create --dry-run=client secret generic k3s-token --from-literal=token=${k3sToken} \
+        -o yaml > /var/lib/rancher/k3s/server/manifests/k3s-token-secret.yaml
 curl -L https://github.com/hetznercloud/hcloud-cloud-controller-manager/releases/latest/download/ccm-networks.yaml \
      -o /var/lib/rancher/k3s/server/manifests/hccm.yaml
   `.trim()),
