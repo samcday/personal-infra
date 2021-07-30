@@ -69,7 +69,7 @@ const controlNode1 = new hcloud.Server("control1", {
 apt update
 apt install -y apparmor apparmor-utils curl
 curl -sfL https://get.k3s.io | K3S_TOKEN="${k3sToken}" sh -s - --cluster-init ${nodeOpts} --disable servicelb \
-                                                               --disable traefik
+                                                               --disable traefik --kube-scheduler-arg=address=0.0.0.0
 kubectl -n kube-system create --dry-run=client secret generic hcloud --from-literal=token=${hcloudToken} \
         --from-literal=network=cluster -o yaml > /var/lib/rancher/k3s/server/manifests/hcloud-secret.yaml
 kubectl -n kube-system create --dry-run=client secret generic k3s-token --from-literal=token=${k3sToken} \
