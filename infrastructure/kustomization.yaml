@@ -5,3 +5,4 @@ resources:
   - sops-secrets-operator
   - cluster-autoscaler
   - ingress-nginx
+  - hcloud-csi-driver
