@@ -41,9 +41,8 @@ const nodeOpts = [
 
   // Without this, flannel tries to direct traffic over the public interface, which dies at the firewall.
   // It's also very bad because VXLAN traffic ain't encrypted dawg.
-  // enp7s0 is the interface that Debian brings up for the private network on AMD cpx11 instances.
-  // Intel instances use something different. Of course. "ens10"
-  "--flannel-iface enp7s0",
+  // AMD instances are enp7s0, Intel instances are ens10
+  "--flannel-iface ens10",
 
   // This is the default CIDR for Hetzner CCCM.
   "--cluster-cidr=10.244.0.0/16",
@@ -54,7 +53,7 @@ const nodeOpts = [
 const controlNode1 = new hcloud.Server("control1", {
   name: "control1",
   image: "debian-10",
-  serverType: "cpx11",
+  serverType: "cx21",
   location: "nbg1",
   sshKeys: ["key"],
   networks: [

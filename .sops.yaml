@@ -1,0 +1,10 @@
+creation_rules:
+  - path_regex: sops-secret\.yaml$
+    encrypted_regex: ^(data|stringData)$
+
+  # keys:
+  # - personal
+  # - cluster key
+  - age: |-
+      age1cydkdqcsl9dzuze2uh65crllur9lkmfxcmew7w3us8cq87kcz39qc0yyhj,
+      age1jzrnfrk2z0epqrtvqws5n9l8t2x5janyg9zamx74hksquvyfxgyqsuwz4r

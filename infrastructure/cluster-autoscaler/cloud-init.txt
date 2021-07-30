@@ -1,0 +1,4 @@
+#!/bin/bash
+apt update
+apt install -y apparmor apparmor-utils
+curl -sfL https://get.k3s.io | K3S_TOKEN="_TOKEN_" K3S_URL=https://10.0.0.2:6443 sh -s - --flannel-iface enp7s0 --kubelet-arg cloud-provider=external
