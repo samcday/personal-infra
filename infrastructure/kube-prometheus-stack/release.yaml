@@ -2,11 +2,9 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
-  namespace: kube-system
+  namespace: monitoring
 spec:
   releaseName: kube-prometheus-stack
-  dependsOn:
-    - name: sops-secrets-operator
   chart:
     spec:
       chart: kube-prometheus-stack
@@ -25,8 +23,6 @@ spec:
       create: false
     alertmanager:
       enabled: false
-    grafana:
-      enabled: false
     kubeApiServer:
       enabled: false
     kubelet:
@@ -37,13 +33,16 @@ spec:
       enabled: false
     kubeEtcd:
       enabled: false
-    enabled:
-      enabled: false
     kubeProxy:
       enabled: false
     kubeStateMetrics:
       enabled: false
-    nodeExporter:
-      enabled: false
-    prometheus:
-      enabled: false
+    kubeScheduler:
+      endpoints: [10.0.0.2]
+    # https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus-node-exporter/values.yaml
+    prometheus-node-exporter:
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+        - key: CriticalAddonsOnly
+          operator: Exists
