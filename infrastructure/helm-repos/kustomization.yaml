@@ -3,3 +3,4 @@ kind: Kustomization
 namespace: kube-system
 resources:
   - autoscaler.yaml
+  - sops-secrets-operator.yaml
