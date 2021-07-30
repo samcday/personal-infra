@@ -23,7 +23,7 @@ spec:
     autoDiscovery:
       clusterName: cluster
     extraArgs:
-      nodes: 1:1:CPX11:NBG1:pool1
+      nodes: 0:1:CPX11:NBG1:pool1
     extraEnvSecrets:
       HCLOUD_TOKEN:
         name: hcloud
