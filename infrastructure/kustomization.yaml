@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - helm-repos
   - sops-secrets-operator
+  - cert-manager
   - cluster-autoscaler
   - hcloud-csi-driver
   - ingress-nginx

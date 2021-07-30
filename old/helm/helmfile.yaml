@@ -5,44 +5,8 @@ repositories:
   url: https://helm-charts.mlohr.com/
 - name: prometheus-community
   url: https://prometheus-community.github.io/helm-charts
-- name: jetstack
-  url: https://charts.jetstack.io
 - name: vmware-tanzu
   url: https://vmware-tanzu.github.io/helm-charts
-
-releases:
-- name: hcloud-controller
-  chart: mlohr/hcloud-cloud-controller-manager
-  version: 2.4.1
-  values:
-  - manager:
-      secret:
-        create: true
-      privateNetwork:
-        enabled: true
-        id: infra
-        clusterSubnet: 10.233.255.0/24
-
-  secrets:
-  - secrets/hcloud-controller.yaml
-
-- name: hcloud-csi-driver
-  chart: mlohr/hcloud-csi-driver
-  version: 1.1.3
-  values:
-  - csiDriver:
-      secret:
-        create: yes
-  secrets:
-  - secrets/hcloud-csi-driver.yaml
-
-- name: cert-manager
-  chart: jetstack/cert-manager
-  values:
-  - installCRDs: true
-    prometheus:
-      servicemonitor:
-        enabled: true
 
 - name: velero
   chart: vmware-tanzu/velero
