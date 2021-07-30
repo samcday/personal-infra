@@ -7,3 +7,4 @@ resources:
   - cluster-autoscaler
   - hcloud-csi-driver
   - ingress-nginx
+  - kube-prometheus-stack

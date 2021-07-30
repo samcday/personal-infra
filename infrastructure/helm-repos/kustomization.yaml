@@ -5,4 +5,5 @@ resources:
   - autoscaler.yaml
   - ingress-nginx.yaml
   - jetstack.yaml
+  - prometheus-community.yaml
   - sops-secrets-operator.yaml
