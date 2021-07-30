@@ -5,30 +5,12 @@ repositories:
   url: https://helm-charts.mlohr.com/
 - name: prometheus-community
   url: https://prometheus-community.github.io/helm-charts
-- name: ingress-nginx
-  url: https://kubernetes.github.io/ingress-nginx
 - name: jetstack
   url: https://charts.jetstack.io
 - name: vmware-tanzu
   url: https://vmware-tanzu.github.io/helm-charts
-- name: sops
-  url: https://isindir.github.io/sops-secrets-operator/
 
 releases:
-- name: sops-secrets-operator
-  chart: sops/sops-secrets-operator
-  version: 0.9.2
-  # https://github.com/isindir/sops-secrets-operator/blob/master/chart/helm3/sops-secrets-operator/values.yaml
-  values:
-  - extraEnv:
-    - name: SOPS_AGE_KEY_FILE
-      value: /etc/sops-age-key/keys.txt
-    secretsAsFiles:
-    # kubectl create secret generic sops-age-key --from-file=keys.txt=/path/to/kube-key.txt
-    - name: sops-age-key
-      mountPath: /etc/sops-age-key
-      secretName: sops-age-key
-
 - name: hcloud-controller
   chart: mlohr/hcloud-cloud-controller-manager
   version: 2.4.1
@@ -53,15 +35,6 @@ releases:
         create: yes
   secrets:
   - secrets/hcloud-csi-driver.yaml
-
-- name: ingress-nginx
-  chart: ingress-nginx/ingress-nginx
-  values:
-  - controller:
-      service:
-        annotations:
-          load-balancer.hetzner.cloud/location: nbg1
-          load-balancer.hetzner.cloud/use-private-ip: "true"
 
 - name: cert-manager
   chart: jetstack/cert-manager
