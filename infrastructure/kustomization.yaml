@@ -4,5 +4,5 @@ resources:
   - helm-repos
   - sops-secrets-operator
   - cluster-autoscaler
-  - ingress-nginx
   - hcloud-csi-driver
+  - ingress-nginx
