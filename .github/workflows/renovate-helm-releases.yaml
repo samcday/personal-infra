@@ -8,3 +8,6 @@ jobs:
         with:
           debug: 'yes'
           cluster-path: './cluster'
+      - uses: EndBug/add-and-commit@v7
+        with:
+          message: 'Update Flux Helm release annotations.'
