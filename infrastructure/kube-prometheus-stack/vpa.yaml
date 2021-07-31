@@ -33,3 +33,15 @@ spec:
     name: kube-prometheus-stack-prometheus-node-exporter
   updatePolicy:
     updateMode: Auto
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: kube-prometheus-stack-operator
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: kube-prometheus-stack-operator
+  updatePolicy:
+    updateMode: Auto
