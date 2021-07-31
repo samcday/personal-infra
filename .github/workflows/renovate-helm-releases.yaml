@@ -4,6 +4,8 @@ jobs:
   renovate:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
       - uses: k8s-at-home/renovate-helm-releases@v1
         with:
           debug: 'yes'
