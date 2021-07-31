@@ -1,5 +1,21 @@
 {
   "extends": [
     "config:base"
+  ],
+  "helm-values": {
+    "fileMatch": [
+      "cluster/.+/release\\.yaml$"
+    ]
+  },
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "cluster/.+\\.yaml$"
+      ],
+      "matchStrings": [
+        "registryUrl=(?<registryUrl>.*?)\n *chart: (?<depName>.*?)\n *version: (?<currentValue>.*)\n"
+      ],
+      "datasourceTemplate": "helm"
+    }
   ]
 }
