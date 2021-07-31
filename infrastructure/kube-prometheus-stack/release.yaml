@@ -19,21 +19,9 @@ spec:
       retries: 3
   # https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
   values:
-    defaultRules:
-      create: false
     alertmanager:
       enabled: false
-    kubeApiServer:
-      enabled: false
-    kubeControllerManager:
-      enabled: false
-    coreDns:
-      enabled: false
     kubeEtcd:
-      enabled: false
-    kubeProxy:
-      enabled: false
-    kubeStateMetrics:
       enabled: false
     kubeScheduler:
       endpoints: [10.0.0.2]
