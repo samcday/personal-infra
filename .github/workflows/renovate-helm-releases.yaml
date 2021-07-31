@@ -8,7 +8,4 @@ jobs:
         with:
           debug: 'yes'
           cluster-path: './'
-          exclude-folders:
-            - ./old
-            - ./control-plane
-
+          exclude-folders: './old,./control-plane'
