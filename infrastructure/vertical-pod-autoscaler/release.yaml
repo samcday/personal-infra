@@ -20,16 +20,21 @@ spec:
   # https://github.com/cowboysysop/charts/blob/master/charts/vertical-pod-autoscaler/values.yaml
   values:
     admissionController:
+      resources: &resources
+        requests:
+          memory: 32Mi
       tolerations: &tolerations
         - key: CriticalAddonsOnly
           operator: Exists
     recommender:
       extraArgs:
         pod-recommendation-min-memory-mb: 32
+      resources: *resources
       tolerations: *tolerations
     updater:
       extraArgs:
         # Allow VPA to update replica sets with only 1 replica. Means there will be downtime,
         # but if we're running stuff with only 1 replica it means we don't really care about uptime ;)
         min-replicas: 1
+      resources: *resources
       tolerations: *tolerations

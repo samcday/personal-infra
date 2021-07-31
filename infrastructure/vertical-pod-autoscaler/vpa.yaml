@@ -36,3 +36,15 @@ spec:
     name: coredns
   updatePolicy:
     updateMode: Auto
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: hcloud-cloud-controller-manager
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: hcloud-cloud-controller-manager
+  updatePolicy:
+    updateMode: Auto
