@@ -21,3 +21,15 @@ spec:
     name: kube-prometheus-stack-grafana
   updatePolicy:
     updateMode: Auto
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: kube-prometheus-stack-prometheus-node-exporter
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: DaemonSet
+    name: kube-prometheus-stack-prometheus-node-exporter
+  updatePolicy:
+    updateMode: Auto

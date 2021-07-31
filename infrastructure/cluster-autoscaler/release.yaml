@@ -7,6 +7,7 @@ spec:
   releaseName: cluster-autoscaler
   dependsOn:
     - name: sops-secrets-operator
+    - name: vertical-pod-autoscaler
   chart:
     spec:
       chart: cluster-autoscaler

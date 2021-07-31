@@ -4,3 +4,4 @@ namespace: kube-system
 resources:
   - cloud-init-sops-secret.yaml
   - release.yaml
+  - vpa.yaml
