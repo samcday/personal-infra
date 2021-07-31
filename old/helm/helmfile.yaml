@@ -1,50 +1,7 @@
 repositories:
 - name: zalando
   url: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
-- name: mlohr
-  url: https://helm-charts.mlohr.com/
-- name: prometheus-community
-  url: https://prometheus-community.github.io/helm-charts
-- name: vmware-tanzu
-  url: https://vmware-tanzu.github.io/helm-charts
 
-- name: velero
-  chart: vmware-tanzu/velero
-  # https://github.com/vmware-tanzu/helm-charts/blob/main/charts/velero/values.yaml
-  values:
-  - deployRestic: true
-    initContainers:
-    - name: velero-plugin-for-aws
-      image: velero/velero-plugin-for-aws:v1.2.0
-      volumeMounts:
-      - mountPath: /target
-        name: plugins
-    configuration:
-      provider: aws
-      backupStorageLocation:
-        name: default
-        bucket: samcday-cluster-backups
-        config:
-          region: eu-central-003
-          s3Url: https://s3.eu-central-003.backblazeb2.com
-      volumeSnapshotLocation:
-        name: default
-        bucket: samcday-cluster-backups
-        config:
-          region: eu-central-003
-          s3Url: https://s3.eu-central-003.backblazeb2.com
-    metrics:
-      serviceMonitor:
-        enabled: true
-    resources:
-      requests:
-        cpu: 100m
-    restic:
-      resources:
-        requests:
-          cpu: 250m
-  secrets:
-  - secrets/velero.yaml
 - name: pgo-config
   chart: ./charts/pgo-config
   values:
@@ -63,19 +20,6 @@ repositories:
   - configAwsOrGcp:
       aws_region: eu-central-003
       wal_s3_bucket: samcday-pgo
-
-- name: node-exporter
-  chart: prometheus-community/prometheus-node-exporter
-  version: 2.0.1
-  values:
-  - prometheus:
-      monitor:
-        enabled: yes
-    tolerations:
-    - key: CriticalAddonsOnly
-      operator: Exists
-    - effect: NoSchedule
-      operator: Exists
 
 - name: synapse
   chart: ./charts/synapse

@@ -1,0 +1,23 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: velero
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: velero
+  updatePolicy:
+    updateMode: Auto
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: restic
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: DaemonSet
+    name: restic
+  updatePolicy:
+    updateMode: Auto
