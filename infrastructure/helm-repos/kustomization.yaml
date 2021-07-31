@@ -4,6 +4,7 @@ namespace: kube-system
 resources:
   - autoscaler.yaml
   - cowboysysop.yaml
+  - grafana.yaml
   - ingress-nginx.yaml
   - jetstack.yaml
   - prometheus-community.yaml

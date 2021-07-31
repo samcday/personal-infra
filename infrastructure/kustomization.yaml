@@ -8,5 +8,6 @@ resources:
   - hcloud-csi-driver
   - ingress-nginx
   - kube-prometheus-stack
+  - loki
   - vertical-pod-autoscaler
   - velero
