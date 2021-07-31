@@ -1,5 +1,0 @@
-config:
-  hcloud:token:
-    secure: AAABAAFxU5MHsTEbRioxOMZMzw5pdgDlgdApwy9ub0QLRr82rBGWtVB8iCPwD+sI24rf+zIOVk4NryV2LE5rq0wfoTyVwc/XZ5go9Cn6LdjYgUQ4a07lbBj45DKrfS5s
-  infra:k3s_token:
-    secure: AAABAKp11zDhj/ofukrj9AkVUf7oicDTDzNwEzRoANMuikQS4Ue+Po/lNcjNQhyKtvF62QGKeFsuw2M4uTpiNUPFw5jTy4IUMtwx6cccHM1OtRseMN1NveVrKttg2f0R

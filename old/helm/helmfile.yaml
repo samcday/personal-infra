@@ -64,13 +64,6 @@ repositories:
       aws_region: eu-central-003
       wal_s3_bucket: samcday-pgo
 
-- name: grafana-agent
-  chart: ./charts/grafana-agent
-  values:
-  - username: '166507'
-  secrets:
-  - secrets/grafana-agent.yaml
-
 - name: node-exporter
   chart: prometheus-community/prometheus-node-exporter
   version: 2.0.1
