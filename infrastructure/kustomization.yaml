@@ -9,5 +9,6 @@ resources:
   - ingress-nginx
   - kube-prometheus-stack
   - loki
+  - promtail
   - vertical-pod-autoscaler
   - velero
