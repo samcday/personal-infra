@@ -7,6 +7,7 @@ spec:
   releaseName: sops-secrets-operator
   chart:
     spec:
+      # renovate: registryUrl=https://isindir.github.io/sops-secrets-operator/
       chart: sops-secrets-operator
       sourceRef:
         kind: HelmRepository
