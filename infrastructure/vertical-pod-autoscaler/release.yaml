@@ -26,4 +26,8 @@ spec:
     recommender:
       tolerations: *tolerations
     updater:
+      extraArgs:
+        # Allow VPA to update replica sets with only 1 replica. Means there will be downtime,
+        # but if we're running stuff with only 1 replica it means we don't really care about uptime ;)
+        min-replicas: 1
       tolerations: *tolerations
