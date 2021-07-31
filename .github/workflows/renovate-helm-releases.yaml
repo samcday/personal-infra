@@ -6,4 +6,5 @@ jobs:
     steps:
       - uses: k8s-at-home/renovate-helm-releases@v1
         with:
+          debug: 'yes'
           cluster-path: './cluster'
