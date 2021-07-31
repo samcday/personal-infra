@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: kube-system
 resources:
   - autoscaler.yaml
+  - cowboysysop.yaml
   - ingress-nginx.yaml
   - jetstack.yaml
   - prometheus-community.yaml
