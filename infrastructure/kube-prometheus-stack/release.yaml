@@ -35,3 +35,13 @@ spec:
           operator: Exists
         - key: CriticalAddonsOnly
           operator: Exists
+    prometheus:
+      prometheusSpec:
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: hcloud-volumes
+              accessModes: [ReadWriteOnce]
+              resources:
+                requests:
+                  storage: 50Gi
