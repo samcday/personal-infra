@@ -5,14 +5,17 @@ metadata:
   namespace: monitoring
 spec:
   releaseName: kube-prometheus-stack
+  dependsOn:
+    - name: vertical-pod-autoscaler
+      namespace: kube-system
   chart:
     spec:
       chart: kube-prometheus-stack
+      version: 17.0.2
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
         namespace: kube-system
-      version: 17.0.2
   interval: 1h0m0s
   install:
     remediation:

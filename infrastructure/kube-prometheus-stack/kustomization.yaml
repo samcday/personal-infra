@@ -4,3 +4,4 @@ namespace: monitoring
 resources:
   - namespace.yaml
   - release.yaml
+  - vpa.yaml
