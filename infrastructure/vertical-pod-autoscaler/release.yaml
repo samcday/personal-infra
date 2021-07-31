@@ -24,6 +24,8 @@ spec:
         - key: CriticalAddonsOnly
           operator: Exists
     recommender:
+      extraArgs:
+        pod-recommendation-min-memory-mb: 32
       tolerations: *tolerations
     updater:
       extraArgs:

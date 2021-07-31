@@ -26,7 +26,7 @@ spec:
       # This is made up and I think entirely unused by Hetzner controller. It's just to appease the chart gods.
       clusterName: cluster
     extraArgs:
-      nodes: 0:1:CPX11:NBG1:pool
+      nodes: 0:5:CPX11:NBG1:pool
     extraEnvSecrets:
       HCLOUD_TOKEN:
         name: hcloud
