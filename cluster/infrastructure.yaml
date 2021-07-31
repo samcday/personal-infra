@@ -9,6 +9,6 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./infrastructure
+  path: ./cluster/infrastructure
   prune: true
   validation: client
