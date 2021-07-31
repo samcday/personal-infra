@@ -28,6 +28,7 @@ spec:
       backupStorageLocation:
         name: default
         bucket: samcday-cluster-backups
+        prefix: cluster
         config:
           region: eu-central-003
           s3Url: https://s3.eu-central-003.backblazeb2.com
