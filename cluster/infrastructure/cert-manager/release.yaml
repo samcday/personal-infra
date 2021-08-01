@@ -21,6 +21,9 @@ spec:
       retries: 3
   # https://github.com/jetstack/cert-manager/blob/master/deploy/charts/cert-manager/values.yaml
   values:
+    image:
+      repository: quay.io/jetstack/cert-manager-controller
+      tag: v1.4.0
     installCRDs: true
     prometheus:
       servicemonitor:
