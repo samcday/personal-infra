@@ -16,6 +16,9 @@ spec:
   interval: 1h
   # https://github.com/grafana/helm-charts/blob/main/charts/loki/values.yaml
   values:
+    image:
+      repository: grafana/loki
+      tag: 2.2.1
     persistence:
       enabled: true
       storageClassName: hcloud-volumes
