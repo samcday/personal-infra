@@ -9,11 +9,11 @@ spec:
     spec:
       # renovate: registryUrl=https://cowboysysop.github.io/charts/
       chart: vertical-pod-autoscaler
+      version: 3.5.0
       sourceRef:
         kind: HelmRepository
         name: cowboysysop
         namespace: kube-system
-      version: 3.5.0
   interval: 1h0m0s
   install:
     remediation:
@@ -21,6 +21,9 @@ spec:
   # https://github.com/cowboysysop/charts/blob/master/charts/vertical-pod-autoscaler/values.yaml
   values:
     admissionController:
+      image:
+        repository: k8s.gcr.io/autoscaling/vpa-admission-controller
+        tag: 0.9.2
       resources: &resources
         requests:
           memory: 32Mi
@@ -28,11 +31,17 @@ spec:
         - key: CriticalAddonsOnly
           operator: Exists
     recommender:
+      image:
+        repository: k8s.gcr.io/autoscaling/vpa-recommender
+        tag: 0.9.2
       extraArgs:
         pod-recommendation-min-memory-mb: 32
       resources: *resources
       tolerations: *tolerations
     updater:
+      image:
+        repository: k8s.gcr.io/autoscaling/vpa-updater
+        tag: 0.9.2
       extraArgs:
         # Allow VPA to update replica sets with only 1 replica. Means there will be downtime,
         # but if we're running stuff with only 1 replica it means we don't really care about uptime ;)
