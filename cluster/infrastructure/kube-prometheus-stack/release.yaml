@@ -25,6 +25,9 @@ spec:
   values:
     alertmanager:
       enabled: false
+      image:
+        repository: quay.io/prometheus/alertmanager
+        tag: v0.22.2
     kubeEtcd:
       enabled: false
     kubeScheduler:
@@ -36,8 +39,23 @@ spec:
           operator: Exists
         - key: CriticalAddonsOnly
           operator: Exists
+    prometheusOperator:
+      admissionWebhooks:
+        patch:
+          image:
+            repository: jettech/kube-webhook-certgen
+            tag: v1.5.2
+      image:
+        repository: quay.io/prometheus-operator/prometheus-operator
+        tag: v0.49.0
+      prometheusConfigReloaderImage:
+        repository: quay.io/prometheus-operator/prometheus-config-reloader
+        tag: v0.49.0
     prometheus:
       prometheusSpec:
+        image:
+          repository: quay.io/prometheus/prometheus
+          tag: v2.28.1
         storageSpec:
           volumeClaimTemplate:
             spec:
