@@ -19,7 +19,7 @@ images:
   - name: quay.io/k8scsi/csi-resizer
     newTag: v0.3.0
   - name: quay.io/k8scsi/csi-provisioner
-    newTag: v1.6.0
+    newTag: v1.6.1
   - name: hetznercloud/hcloud-csi-driver
     newTag: 1.5.3
   - name: quay.io/k8scsi/livenessprobe
