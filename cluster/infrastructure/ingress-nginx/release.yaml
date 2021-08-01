@@ -9,11 +9,11 @@ spec:
     spec:
       # renovate: registryUrl=https://kubernetes.github.io/ingress-nginx
       chart: ingress-nginx
+      version: 3.34.0
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx
         namespace: kube-system
-      version: 3.34.0
   interval: 1h0m0s
   install:
     remediation:
@@ -21,6 +21,11 @@ spec:
   # https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
   values:
     controller:
+      image:
+        registry: k8s.gcr.io
+        image: ingress-nginx/controller
+        tag: "v0.48.1"
+        digest: sha256:e9fb216ace49dfa4a5983b183067e97496e7a8b307d2093f4278cd550c303899
       service:
         annotations:
           load-balancer.hetzner.cloud/location: nbg1
