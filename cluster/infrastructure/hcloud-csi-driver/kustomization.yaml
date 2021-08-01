@@ -13,3 +13,20 @@ patches:
       kind: DaemonSet
       name: hcloud-csi-node
     path: ds-patch.yaml
+images:
+  - name: quay.io/k8scsi/csi-attacher
+    newTag: v2.2.0
+  - name: quay.io/k8scsi/csi-resizer
+    newTag: v0.3.0
+  - name: quay.io/k8scsi/csi-provisioner
+    newTag: v1.6.0
+  - name: hetznercloud/hcloud-csi-driver
+    newTag: 1.5.3
+  - name: quay.io/k8scsi/livenessprobe
+    newTag: v1.1.0
+  - name: quay.io/k8scsi/csi-node-driver-registrar
+    newTag: v1.3.0
+  - name: hetznercloud/hcloud-csi-driver
+    newTag: 1.5.3
+  - name: quay.io/k8scsi/livenessprobe
+    newTag: v1.1.0
