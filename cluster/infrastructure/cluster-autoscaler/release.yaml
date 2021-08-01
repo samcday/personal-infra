@@ -12,17 +12,20 @@ spec:
     spec:
       # renovate: registryUrl=https://kubernetes.github.io/autoscaler
       chart: cluster-autoscaler
+      version: 9.10.3
       sourceRef:
         kind: HelmRepository
         name: autoscaler
         namespace: kube-system
-      version: 9.10.3
   interval: 1h0m0s
   install:
     remediation:
       retries: 3
   # https://github.com/kubernetes/autoscaler/blob/master/charts/cluster-autoscaler/values.yaml
   values:
+    image:
+      repository: k8s.gcr.io/autoscaling/cluster-autoscaler
+      tag: v1.21.0
     cloudProvider: hetzner
     autoDiscovery:
       # This is made up and I think entirely unused by Hetzner controller. It's just to appease the chart gods.
