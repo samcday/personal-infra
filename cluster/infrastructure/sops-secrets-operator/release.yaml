@@ -20,6 +20,9 @@ spec:
       retries: 3
   # https://github.com/isindir/sops-secrets-operator/blob/master/chart/helm3/sops-secrets-operator/values.yaml
   values:
+    image:
+      repository: isindir/sops-secrets-operator
+      tag: 0.3.2
     secretsAsFiles:
       - name: age
         mountPath: /etc/age
