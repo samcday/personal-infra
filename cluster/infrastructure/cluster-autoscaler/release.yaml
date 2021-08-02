@@ -5,9 +5,6 @@ metadata:
   namespace: kube-system
 spec:
   releaseName: cluster-autoscaler
-  dependsOn:
-    - name: sops-secrets-operator
-    - name: vertical-pod-autoscaler
   chart:
     spec:
       # renovate: registryUrl=https://kubernetes.github.io/autoscaler

@@ -5,8 +5,8 @@ metadata:
   namespace: kube-system
 spec:
   dependsOn:
-    - vertical-pod-autoscaler
-    - sops-secrets-operator
+    - name: vertical-pod-autoscaler
+    - name: sops-secrets-operator
   interval: 10m0s
   sourceRef:
     kind: GitRepository
