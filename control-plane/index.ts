@@ -11,10 +11,10 @@ const network = new hcloud.Network("cluster", {
 
 const networkId = network.id.apply(id => parseInt(id, 10));
 
-const controlPlaneSubnet = new hcloud.NetworkSubnet("control-plane", {
+const nodeSubnet = new hcloud.NetworkSubnet("nodes", {
   networkId: networkId,
   networkZone: "eu-central",
-  ipRange: "10.0.0.0/24",
+  ipRange: "10.0.0.0/16",
   type: "cloud",
 }, {dependsOn: network});
 
@@ -80,7 +80,7 @@ curl -L https://github.com/hetznercloud/hcloud-cloud-controller-manager/releases
      -o /var/lib/rancher/k3s/server/manifests/hccm.yaml
   `.trim()),
 }, {
-  dependsOn: [firewall, controlPlaneSubnet],
+  dependsOn: [firewall, nodeSubnet],
 });
 
 export const controlNode1PublicIP = controlNode1.ipv4Address;
