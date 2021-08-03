@@ -1,0 +1,7 @@
+apiVersion: kustomization.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - coredns.yaml
+  - hcloud-controller-manager.yaml
+  - local-path-provisioner.yaml
+  - metrics-server.yaml
