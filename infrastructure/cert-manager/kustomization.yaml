@@ -4,4 +4,3 @@ namespace: kube-system
 resources:
   - release.yaml
   - vpa.yaml
-  - letsencrypt.yaml
