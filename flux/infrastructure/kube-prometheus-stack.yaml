@@ -1,17 +1,16 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
 metadata:
-  name: infrastructure
+  name: kube-prometheus-stack
   namespace: kube-system
 spec:
   dependsOn:
     - name: vertical-pod-autoscaler
-    - name: sops-secrets-operator
   interval: 10m0s
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./infrastructure
+  path: ./infrastructure/kube-prometheus-stack
   prune: true
   validation: client
