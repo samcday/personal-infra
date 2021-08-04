@@ -22,10 +22,11 @@ spec:
         - --source=service
         - --source=ingress
         - --domain-filter=samcday.com
-        - --provider=hetzner
+        - --provider=cloudflare
+        - --cloudflare-proxied
         env:
-        - name: HETZNER_TOKEN
+        - name: CF_API_TOKEN
           valueFrom:
             secretKeyRef:
-              name: hcloud-dns
+              name: cloudflare-dns
               key: token
