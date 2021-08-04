@@ -9,3 +9,4 @@ resources:
   - prometheus-community.yaml
   - sops-secrets-operator.yaml
   - vmware-tanzu.yaml
+  - zalando-pgo.yaml
