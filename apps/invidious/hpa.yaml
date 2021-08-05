@@ -1,5 +1,3 @@
----
-# Source: invidious/templates/hpa.yaml
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:

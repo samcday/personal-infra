@@ -4,3 +4,7 @@ namespace: default
 resources:
   - redis-auth-sops-secret.yaml
   - redis-release.yaml
+  - config-sops-secret.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
