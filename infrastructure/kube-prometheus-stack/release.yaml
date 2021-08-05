@@ -53,6 +53,9 @@ spec:
         image:
           repository: quay.io/prometheus/prometheus
           tag: v2.28.1
+        resources:
+          limits:
+            cpu: 1
         storageSpec:
           volumeClaimTemplate:
             spec:
