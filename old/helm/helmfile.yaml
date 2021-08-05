@@ -3,23 +3,3 @@ repositories:
   chart: ./charts/synapse
   secrets:
   - secrets/synapse.yaml
-
-- name: wekan
-  chart: ./charts/wekan
-  values:
-  - image:
-      tag: v5.41
-    ingress:
-      enabled: false
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-      hosts:
-        - host: wekan.samcday.com
-      tls:
-      - hosts:
-        - wekan.samcday.com
-        secretName: wekan-tls
-    wekan:
-      secrets:
-        MONGO_URL: default/wekan-mongodb-admin-wekan
