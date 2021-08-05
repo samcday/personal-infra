@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kube-system
+resources:
+  - crds/mongodbcommunity.yaml
+  - manager.yaml
+  - service_account.yaml
+  - role.yaml
+  - role_binding.yaml
+images:
+  - name: quay.io/mongodb/mongodb-kubernetes-operator
+    newTag: 0.7.0
+patches:
+  - target:
+      kind: Deployment
+      name: mongodb-kubernetes-operator
+    path: patches/watch_all_namespaces.yaml

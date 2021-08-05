@@ -1,13 +1,11 @@
----
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: mongodb-kubernetes-operator
 rules:
 - apiGroups:
   - ""
   resources:
-  - pods
   - services
   - configmaps
   - secrets
@@ -25,6 +23,17 @@ rules:
   - statefulsets
   verbs:
   - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
   - delete
   - get
   - list
