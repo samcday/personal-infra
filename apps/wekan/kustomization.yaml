@@ -6,6 +6,7 @@ resources:
   - mongodb-password-sops-secret.yaml
   - mongodb.yaml
   - service.yaml
+  - ingress.yaml
 images:
   - name: wekanteam/wekan
     newTag: v5.41
