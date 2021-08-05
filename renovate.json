@@ -4,13 +4,14 @@
   ],
   "helm-values": {
     "fileMatch": [
-      "cluster/.+/release\\.yaml$"
+      ".+release\\.yaml$"
     ]
   },
   "regexManagers": [
     {
       "fileMatch": [
-        "cluster/.+\\.yaml$"
+        "infrastructure/.+\\.yaml$",
+        "apps/.+\\.yaml$"
       ],
       "matchStrings": [
         "registryUrl=(?<registryUrl>.*?)\n *chart: (?<depName>.*?)\n *version: (?<currentValue>.*)\n"
