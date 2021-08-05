@@ -27,11 +27,11 @@ spec:
     webhook:
       image:
         repository: quay.io/jetstack/cert-manager-webhook
-        tag: v1.5.0
+        tag: v1.4.2
     cainjector:
       image:
         repository: quay.io/jetstack/cert-manager-cainjector
-        tag: v1.5.0
+        tag: v1.4.2
     installCRDs: true
     prometheus:
       servicemonitor:
