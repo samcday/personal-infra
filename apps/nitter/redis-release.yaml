@@ -1,0 +1,33 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: nitter-redis
+spec:
+  releaseName: nitter-redis
+  chart:
+    spec:
+      chart: redis
+      version: 14.8.8
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: kube-system
+  interval: 1h0m0s
+  timeout: 1m
+  install:
+    remediation:
+      retries: 3
+  # https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
+  values:
+    architecture: standalone
+    global:
+      storageClass: hcloud-volumes
+    auth:
+      existingSecret: nitter-redis-auth
+      existingSecretPasswordKey: password
+    replica:
+      replicaCount: 0
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
