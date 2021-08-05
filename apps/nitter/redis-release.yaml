@@ -23,8 +23,9 @@ spec:
     global:
       storageClass: hcloud-volumes
     auth:
-      existingSecret: nitter-redis-auth
-      existingSecretPasswordKey: password
+      enabled: false
+      # existingSecret: nitter-redis-auth
+      # existingSecretPasswordKey: password
     replica:
       replicaCount: 0
     metrics:
