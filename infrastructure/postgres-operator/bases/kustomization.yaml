@@ -1,4 +1,4 @@
-namespace: postgres-operator
+namespace: kube-system
 
 commonLabels:
   postgres-operator.crunchydata.com/control-plane: postgres-operator
