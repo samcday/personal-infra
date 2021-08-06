@@ -83,4 +83,30 @@ curl -L https://github.com/hetznercloud/hcloud-cloud-controller-manager/releases
   dependsOn: [firewall, nodeSubnet],
 });
 
+for (const i of [1, 2]) {
+  const controlNode = new hcloud.Server("control" + (1 + i), {
+    name: "control" + (1 + i),
+    image: "debian-10",
+    serverType: "cpx11",
+    location: "nbg1",
+    sshKeys: ["key"],
+    networks: [
+      {
+        ip: "10.0.0." + (99 + i),
+        networkId,
+      }
+    ],
+    firewallIds: [firewall.id.apply(id => parseInt(id, 10))],
+    userData: cfg.requireSecret("k3s_token").apply(k3sToken => `
+  #!/bin/bash
+  apt update
+  apt install -y apparmor apparmor-utils curl
+  curl -sfL https://get.k3s.io | K3S_TOKEN="${k3sToken}" sh -s - --server https://10.0.0.2:6443 ${nodeOpts.replace("ens10", "enp7s0")} --disable servicelb \
+                                                                 --disable traefik --kube-scheduler-arg=address=0.0.0.0
+    `.trim()),
+  }, {
+    dependsOn: [firewall, nodeSubnet],
+  });
+}
+
 export const controlNode1PublicIP = controlNode1.ipv4Address;
