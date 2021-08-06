@@ -7,7 +7,7 @@ spec:
   volume:
     size: 1Gi
     storageClass: hcloud-volumes
-  numberOfInstances: 3
+  numberOfInstances: 1
   users:
     invidious:
     - superuser
