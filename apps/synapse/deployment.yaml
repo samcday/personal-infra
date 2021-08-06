@@ -3,10 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: synapse
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
   name: synapse
-  namespace: {{ .Release.Namespace }}
 spec:
   strategy:
     type: Recreate
@@ -14,14 +11,12 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: synapse
-      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       annotations:
         backup.velero.io/backup-volumes: synapse-media
       labels:
         app.kubernetes.io/name: synapse
-        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       initContainers:
       - name: setup-dbconfig
@@ -29,27 +24,36 @@ spec:
         command:
         - sh
         - '-c'
-        - 'cp /config/dbconfig.yaml /extra-config && sed -i -e s/_HOST_/$SYNAPSE_DB_SERVICE_HOST/ -e s/_USER_/$(cat /dbcreds/username)/ -e s/_PASS_/$(cat /dbcreds/password)/ /extra-config/dbconfig.yaml && cat /config/homeserver.yaml /extra-config/dbconfig.yaml >> /extra-config/generated-homeserver.yaml'
+        - |-
+          ls /dbcreds && \
+          cat /dbcreds/password && \
+          cp /homeserver-config/homeserver.yaml /generated-config/homeserver.yaml && \
+          echo "database:" >> /generated-config/homeserver.yaml && \
+          echo "  name: psycopg2" >> /generated-config/homeserver.yaml && \
+          echo "  args:" >> /generated-config/homeserver.yaml && \
+          echo "    user: $(cat /dbcreds/user)" >> /generated-config/homeserver.yaml && \
+          echo "    password: $(cat /dbcreds/password)" >> /generated-config/homeserver.yaml && \
+          echo "    host: $(cat /dbcreds/host)" >> /generated-config/homeserver.yaml && \
+          echo "    port: $(cat /dbcreds/port)" >> /generated-config/homeserver.yaml && \
+          echo "    cp_min: 5" >> /generated-config/homeserver.yaml && \
+          echo "    cp_min: 10" >> /generated-config/homeserver.yaml
         volumeMounts:
-        - name: config
-          mountPath: /config
-          readOnly: true
-        - name: secret
-          mountPath: /secret
+        - name: homeserver-config
+          mountPath: /homeserver-config
           readOnly: true
         - name: dbcreds
           mountPath: /dbcreds
           readOnly: true
         - name: synapse-media
           mountPath: /media
-        - name: extra-config
-          mountPath: /extra-config
+        - name: generated-config
+          mountPath: /generated-config
       containers:
-      - name: {{ .Chart.Name }}
+      - name: synapse
         image: matrixdotorg/synapse:v1.38.1
         env:
         - name: SYNAPSE_CONFIG_PATH
-          value: /extra-config/generated-homeserver.yaml
+          value: /generated-config/homeserver.yaml
         livenessProbe:
           httpGet:
             path: /health
@@ -64,28 +68,25 @@ spec:
         - name: config
           mountPath: /config
           readOnly: true
-        - name: secret
-          mountPath: /secret
-          readOnly: true
         - name: dbcreds
           mountPath: /dbcreds
           readOnly: true
         - name: synapse-media
           mountPath: /media
-        - name: extra-config
-          mountPath: /extra-config
+        - name: generated-config
+          mountPath: /generated-config
       volumes:
       - name: dbcreds
         secret:
-          secretName: synapse-user.synapse-db.credentials.postgresql.acid.zalan.do
+          secretName: synapse-pguser
       - name: config
         configMap:
-          name: synapse-homeserver-yaml
-      - name: secret
+          name: synapse-config
+      - name: homeserver-config
         secret:
-          secretName: synapse-homeserver-secrets
+          secretName: synapse-homeserver-config
       - name: synapse-media
         persistentVolumeClaim:
           claimName: synapse-media
-      - name: extra-config
+      - name: generated-config
         emptyDir: {}
