@@ -28,7 +28,17 @@ const firewall = new hcloud.Firewall("firewall", {
       "0.0.0.0/0",
       "::/0",
     ],
-  })),
+  })).concat([
+    {
+      direction: "in",
+      protocol: "udp",
+      port: "41641",
+      sourceIps: [
+        "0.0.0.0/0",
+        "::/0",
+      ],
+    },
+  ]),
 });
 
 const nodeOpts = [
