@@ -7,6 +7,7 @@ resources:
   - mongodb.yaml
   - service.yaml
   - ingress.yaml
+  - vpa.yaml
 images:
   - name: wekanteam/wekan
     newTag: v5.41

@@ -1,0 +1,23 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: wekan
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: wekan
+  updatePolicy:
+    updateMode: Auto
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: wekan-mongodb
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: wekan-mongodb
+  updatePolicy:
+    updateMode: Auto
