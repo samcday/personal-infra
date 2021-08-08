@@ -5,3 +5,4 @@ resources:
   - namespace.yaml
   - release.yaml
   - vpa.yaml
+  - grafana-tunnel-sops-secret.yaml
