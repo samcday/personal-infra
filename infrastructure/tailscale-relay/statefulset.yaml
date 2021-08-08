@@ -1,0 +1,60 @@
+---
+# Source: tailscale-relay/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tailscale-relay
+  labels:
+    app.kubernetes.io/name: tailscale-relay
+    app.kubernetes.io/instance: tailscale-relay
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tailscale-relay
+  serviceName: tailscale-relay
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tailscale-relay
+        app.kubernetes.io/instance: tailscale-relay
+
+      annotations:
+        checksum/configMap: 1338c4aecd2b3b1dcf8a6a5e6a6d3cdb1c108cf8f6b567ce54f832a1c043c63f
+        checksum/secret: f50e0e3064097250a8976b524681e660d7d8e3a6910cb80c861db3120e58b63f
+
+    spec:
+      hostNetwork: true
+      containers:
+        - name: tailscale-relay
+          image: docker.io/mvisonneau/tailscale:v1.8.5
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TAILSCALE_ADVERTISE_ROUTES
+              value: 10.43.0.0/16
+            - name: TAILSCALE_AUTH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tailscale-relay-auth-token
+                  key: token
+          ports:
+            - name: exporter
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: var-lib-tailscale
+              mountPath: /var/lib/tailscale
+          securityContext: 
+                capabilities:
+                  add:
+                  - NET_ADMIN
+  volumeClaimTemplates:
+    - metadata:
+        name: var-lib-tailscale
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: hcloud-volumes

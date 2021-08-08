@@ -1,0 +1,28 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: tailscale-relay
+spec:
+  releaseName: tailscale-relay
+  chart:
+    spec:
+      chart: tailscale-relay
+      version: 0.0.10
+      sourceRef:
+        kind: HelmRepository
+        name: mvisonneau
+        namespace: kube-system
+  interval: 1h
+  # https://github.com/mvisonneau/helm-charts/blob/main/charts/tailscale-relay/values.yaml
+  values:
+    image:
+      repository: docker.io/mvisonneau/tailscale
+      tag: 1.8.5
+    config:
+      variables:
+        TAILSCALE_ADVERTISE_ROUTES: 10.43.0.0/16
+  valuesFrom:
+    - kind: Secret
+      name: tailscale-relay-auth-token
+      valuesKey: token
+      targetPath: config.authToken
