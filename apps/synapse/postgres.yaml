@@ -7,28 +7,24 @@ spec:
   postgresVersion: 13
   instances:
     - name: instance1
+      replicas: 1
+      resources:
+        requests:
+          memory: 128Mi
+        limits:
+          memory: 256Mi
       dataVolumeClaimSpec:
         accessModes:
         - "ReadWriteOnce"
         resources:
           requests:
-            storage: 50Gi
-        storageClassName: hcloud-volumes
-      walVolumeClaimSpec:
-        accessModes:
-        - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: 100Gi
+            storage: 30Gi
         storageClassName: hcloud-volumes
   backups:
     pgbackrest:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.33-0
       repoHost:
         dedicated: {}
-      configuration:
-      - secret:
-          name: pgo-s3-creds
       global:
         repo1-path: /pgbackrest/default/synapse
         repo1-retention-full: "14"
@@ -43,7 +39,10 @@ spec:
           bucket: samcday-pgo
           endpoint: s3.eu-central-003.backblazeb2.com
           region: eu-central-003
+      configuration:
+      - secret:
+          name: pgo-s3-creds
       manual:
         repoName: repo1
         options:
-         - --type=incremental
+         - --type=full

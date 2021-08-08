@@ -60,10 +60,10 @@ spec:
             port: 8008
         resources:
           requests:
-            memory: "1024Mi"
+            memory: "128Mi"
             cpu: "500m"
           limits:
-            memory: "1536Mi"
+            memory: "256Mi"
         volumeMounts:
         - name: config
           mountPath: /config
