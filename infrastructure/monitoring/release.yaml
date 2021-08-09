@@ -90,6 +90,7 @@ spec:
         image:
           repository: quay.io/prometheus/prometheus
           tag: v2.28.1
+        retention: 5m
         remoteWrite:
           - url: https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
             basicAuth:
