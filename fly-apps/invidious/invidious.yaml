@@ -1,0 +1,19 @@
+channel_threads: 1
+database_url: __DB__
+registration_enabled: true
+check_tables: false
+hmac_key: __HMAC__
+use_pubsub_feeds: true
+domain: invidious.samcday.com
+statistics_enabled: true
+feed_threads: 1
+full_refresh: false
+https_only: true
+external_port: 443
+popular_enabled: false
+default_user_preferences:
+  dark_mode: true
+  feed_menu: [Subscriptions, Playlists]
+  default_home: Subscriptions
+  quality: dash
+  quality_dash: 1080p
