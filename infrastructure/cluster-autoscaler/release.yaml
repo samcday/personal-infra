@@ -22,7 +22,7 @@ spec:
   values:
     image:
       repository: k8s.gcr.io/autoscaling/cluster-autoscaler
-      tag: v1.21.0
+      tag: v1.22.0
     cloudProvider: hetzner
     autoDiscovery:
       # This is made up and I think entirely unused by Hetzner controller. It's just to appease the chart gods.
