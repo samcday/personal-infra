@@ -1,4 +1,4 @@
-name: Deploy libreddit
+name: Deploy nitter
 on:
   push:
     paths: fly-apps/nitter/**
