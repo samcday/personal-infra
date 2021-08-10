@@ -8,6 +8,4 @@ sed -i \
     -e s/__HMAC__/$HMAC/ \
     /src/nitter.conf
 
-cat /src/nitter.conf
-
 /src/nitter
