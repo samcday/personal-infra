@@ -1,0 +1,59 @@
+server_name: samcday.com
+public_baseurl: https://matrix.samcday.com
+use_presence: true
+listeners:
+- port: 8080
+  tls: false
+  type: http
+  x_forwarded: true
+  bind_addresses: ['0.0.0.0']
+  resources:
+  - names: [client, federation]
+    compress: false
+- type: metrics
+  port: 9000
+  bind_addresses:
+    - '0.0.0.0'
+admin_contact: 'mailto:me@samcday.com'
+federation_ip_range_blacklist:
+- '127.0.0.0/8'
+- '10.0.0.0/8'
+- '172.16.0.0/12'
+- '192.168.0.0/16'
+- '100.64.0.0/10'
+- '169.254.0.0/16'
+- '::1/128'
+- 'fe80::/64'
+- 'fc00::/7'
+log_config: "/config/log.yaml"
+media_store_path: "/media"
+url_preview_enabled: true
+url_preview_ip_range_blacklist:
+- '127.0.0.0/8'
+- '10.0.0.0/8'
+- '172.16.0.0/12'
+- '192.168.0.0/16'
+- '100.64.0.0/10'
+- '169.254.0.0/16'
+- '::1/128'
+- 'fe80::/64'
+- 'fc00::/7'
+registration_shared_secret: __REGSECRET__
+enable_metrics: true
+metrics_flags:
+  known_servers: true
+report_stats: true
+signing_key: __SIGNINGKEY__
+trusted_key_servers:
+- server_name: "matrix.org"
+suppress_key_server_warning: true
+database:
+  name: psycopg2
+  args:
+    user: __DBUSER__
+    password: __DBPASS__
+    host: __DBHOST__
+    port: __DBPORT__
+    database: __DBNAME__
+    cp_min: 5
+    cp_min: 10
