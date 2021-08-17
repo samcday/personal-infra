@@ -93,7 +93,7 @@ spec:
         tag: v0.49.0
       prometheusConfigReloaderImage:
         repository: quay.io/prometheus-operator/prometheus-config-reloader
-        tag: v0.49.0
+        tag: v0.50.0
     prometheus:
       # https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
       prometheusSpec:
