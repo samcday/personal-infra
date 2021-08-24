@@ -31,7 +31,7 @@ spec:
     cainjector:
       image:
         repository: quay.io/jetstack/cert-manager-cainjector
-        tag: v1.4.3
+        tag: v1.5.3
     installCRDs: true
     prometheus:
       servicemonitor:
