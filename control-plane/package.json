@@ -5,6 +5,6 @@
     },
     "dependencies": {
         "@pulumi/hcloud": "1.2.0",
-        "@pulumi/pulumi": "3.9.1"
+        "@pulumi/pulumi": "3.11.0"
     }
 }
