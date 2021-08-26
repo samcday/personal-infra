@@ -1,7 +1,7 @@
 {
     "name": "control-plane",
     "devDependencies": {
-        "@types/node": "14.17.9"
+        "@types/node": "14.17.12"
     },
     "dependencies": {
         "@pulumi/hcloud": "1.2.0",
