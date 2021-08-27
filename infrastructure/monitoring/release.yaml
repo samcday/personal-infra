@@ -99,7 +99,7 @@ spec:
       prometheusSpec:
         image:
           repository: quay.io/prometheus/prometheus
-          tag: v2.28.1
+          tag: v2.29.2
         retention: 5m
         scrapeInterval: 2m
         enforcedSampleLimit: 100000
